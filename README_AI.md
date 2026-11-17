@@ -1,10 +1,12 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 
-# 会意输入法 · Android 开发版
+# 会意输入法 · Android 使用说明
 
 **听懂话，看懂意。** 英文名称为 Huiyi Keyboard。0.1.7 起统一使用会意品牌，命名范围及覆盖安装说明见 [BRANDING.md](BRANDING.md)。
 
-基于 [Trime / 同文输入法](https://github.com/osfans/trime) 与 Rime。当前版本 0.1.40-ai，安卓首版包含本地中英文键盘、腾讯云语音转写、AI 文字整理和用户主动截屏后的聊天回复建议。
+基于 [Trime / 同文输入法](https://github.com/osfans/trime) 与 Rime。当前公开版本 0.1.41-ai，包含中英文键盘、语音转写、AI 文字整理和用户主动截屏后的聊天回复建议。
+
+**下载：**[最新版 Android arm64 APK](https://github.com/jerrytian98-max/huiyi-ime/releases/latest/download/huiyi-android-v0.1.41-arm64-debug.apk) · [所有版本](https://github.com/jerrytian98-max/huiyi-ime/releases)
 
 ## AI回复方式
 
@@ -34,7 +36,7 @@
 
 新安装使用通用云端配置，旧内测预置的 `16k_zh_en` 首次升级自动切到通用中文。已有其他自选腾讯云模型、自定义兼容接口和用户后来选择的系统语音方式会保留。设置位置为「会意输入法 → AI 设置 → 腾讯云识别模型」。
 
-腾讯云 AppID、SecretId 和 SecretKey 独立配置，SecretId、SecretKey 使用 Android Keystore 加密保存。内测默认凭证已加密预填，随包恢复材料仍可被逆向提取，仅用于内测。兼容接口支持独立语音 Key，留空时沿用文字 Key。
+腾讯云 AppID、SecretId 和 SecretKey 独立配置，SecretId、SecretKey 使用 Android Keystore 加密保存。公开版不附带开发者的服务凭证，请在 AI 设置填写自己的凭证。兼容接口支持独立语音 Key，留空时沿用文字 Key。
 
 0.1.19 已在 API 35 模拟器通过中文、英文真实云端识别及 DeepSeek 整理，以及注入麦克风后的完整录音、预览和光标插入。0.1.20 重新验证默认值、升级迁移和中英文文件直传识别。前一版中英大模型的4004额度问题保留在历史测试记录中，当前默认使用已测通的通用模型。实体 One UI 手机和真人麦克风仍待验证。
 
@@ -46,11 +48,9 @@
 
 0.1.12 进一步清理数字和符号页：移除全部次级长按／滑动功能与上方提示，删除页内的“迷你”“数字”快捷键，并重新分配按键宽度。
 
-## DeepSeek 内测默认配置
+## AI 服务配置
 
-本内测版按用户要求已加密附带默认Key。新装自动使用DeepSeek官方接口，文字与AI回复模型均为 `deepseek-flash`（当前DeepSeek V4.1 Flash），无需再手动填写。手机本地配置使用Android Keystore AES-GCM加密保存。Key可替换、清空，或通过“恢复默认DeepSeek配置”恢复。自定义服务保留，旧版默认Tokenlink配置会备份后切换。
-
-APK中包含恢复共享Key的材料，分发加密不能抵抗逆向提取；此包仅用于内测，不适合公开分发。内置Key只允许用于DeepSeek官方HTTPS聊天接口。安卓模拟器已直连官方接口验证中英文整理与截图理解，详见 [DEEPSEEK_DEFAULTS.md](DEEPSEEK_DEFAULTS.md)。
+公开版不会预置共享 API Key。请在「会意输入法 → AI 设置」填写服务商提供的 HTTPS Chat Completions 地址、文字模型、视觉模型和 API Key；语音识别可另行配置腾讯云或兼容的音频转写接口。保存后即可使用对应 AI 功能。服务费用由用户与服务商的协议决定。密钥使用 Android Keystore 加密保存在本机，但发送给模型的文字、录音或截图会交由所选服务处理。
 
 ## 默认存储空间
 
@@ -85,8 +85,8 @@ APK中包含恢复共享Key的材料，分发加密不能抵抗逆向提取；�
 1. 安装 `huiyi-android-arm64-debug.apk`（多数现代安卓手机）。要求 Android 8.0 及以上。x86_64 包用于模拟器。
 2. 打开应用，在两步向导中启用并切换至会意输入法；存储空间自动使用应用专属目录，无需选择目录或授予外部文件夹访问权限。第一次部署词库需要等待；默认已选择雾凇拼音；如手动切换，可在方案菜单中重新选择“雾凇拼音”。
 3. 打开任意聊天输入框。键盘上方有“语音”“整理”“AI回复”三个入口，长按任一入口打开 AI 设置；设置首页列表中也有“AI 设置”入口（位于“常规”上方）。
-4. 普通拼音和英文输入无需 AI Key。语音默认使用腾讯云，已加密预填内测凭证。请核对当前识别模型的可用额度，或在 AI 设置选择兼容接口并填写对应地址、模型和语音 Key。
-5. 在 AI 设置填写**完整的 HTTPS Chat Completions 地址**、文字模型、支持图片的AI回复模型及你自己的 API Key。可分别选用不同模型，但两者共用服务地址与 Key。本内测版已提供DeepSeek默认配置，请求使用所提供账户的额度；更换服务时需填写对应Key，内置Key只允许用于DeepSeek官方接口。
+4. 普通拼音和英文输入无需 AI Key。语音云识别需在 AI 设置中自行填写腾讯云凭证，或配置兼容的音频转写服务。
+5. 在 AI 设置填写**完整的 HTTPS Chat Completions 地址**、文字模型、支持图片的 AI 回复模型及自己的 API Key。文字整理和截图回复共用服务地址与 Key；语音凭证可单独设置。
 
 选择兼容接口转写时，需要配置 multipart Audio Transcriptions 接口。聊天地址不能作为音频转写地址使用。此前0.1.1验证过的 OpenAI 示例地址为 `https://api.openai.com/v1/audio/transcriptions`，语音模型 `gpt-4o-mini-transcribe`，已经过真实音频请求验证。兼容接口可单独填写语音 API Key，留空时沿用文字 Key。腾讯云使用独立凭证。云端转写和 AI 整理分别产生请求费用。
 

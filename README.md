@@ -1,169 +1,69 @@
-<!--
-SPDX-FileCopyrightText: 2015 - 2024 Rime community
+<!-- SPDX-FileCopyrightText: 2015 - 2026 Rime community and Huiyi contributors -->
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 
-SPDX-License-Identifier: GPL-3.0-or-later
--->
+# 会意输入法
 
-# Huiyi Keyboard / 会意输入法
+**看懂屏幕内容，帮你组织语言并直接回复。** 会意输入法是一款面向 Android 的中英文输入法，基于 [Trime](https://github.com/osfans/trime) 和 [Rime](https://rime.im)，加入雾凇拼音、语音转写、AI 文字整理和聊天截图回复等功能。
 
-**听懂话，看懂意。** An Android keyboard based on Trime/Rime, with speech input, AI text cleanup and screenshot-based reply suggestions. See [Huiyi setup and build instructions](README_AI.md) for this fork and its internal-test APKs.
+## 下载
 
-The following documentation and distribution links describe the upstream Trime project.
+**最新 Android APK：**[会意输入法 v0.1.41（arm64，适用于大多数安卓手机）](https://github.com/jerrytian98-max/huiyi-ime/releases/latest/download/huiyi-android-v0.1.41-arm64-debug.apk)
 
-## Upstream: Trime
+也可前往[全部版本与更新记录](https://github.com/jerrytian98-max/huiyi-ime/releases)查看 APK、发布日期和校验值。此为 Android 调试签名版本；卸载重装或更换签名版本时，系统可能要求先卸载旧版本，应用内设置也可能随卸载清除。Android 8.0 及以上可安装。桌面端和 iOS 版本目前尚未提供。
 
-Rime IME for Android
+## 能做什么
 
-![build](https://github.com/osfans/trime/actions/workflows/commit-ci.yml/badge.svg?branch=develop)
-[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![GitHub release](https://img.shields.io/github/release/osfans/trime.svg)](https://github.com/osfans/trime/releases)
-[![F-Droid release](https://img.shields.io/f-droid/v/com.osfans.trime.svg)](https://f-droid.org/packages/com.osfans.trime)
-[![Latest build](https://img.shields.io/github/last-commit/osfans/trime.svg)](http://osfans.github.io/trime/)
+- **中英文输入：**内置雾凇拼音简体方案，提供全键盘和九宫格布局；可切换浅色、深色主题，并支持常用符号及剪贴板输入。
+- **按住空格说话：**长按空格开始录音，松开后转写并把文字放到当前输入光标。云端转写需要在 AI 设置里配置服务；录音期间键盘显示音频律动反馈。
+- **整理输入框文字：**点击工具栏「整理」，尽量读取当前编辑框里的完整草稿，交给 AI 调整条理和表达，再核对后写回原输入框。
+- **看聊天截图并拟回复：**点击「AI回复」截取当前屏幕，由视觉模型理解可见聊天上下文并生成建议。也可以按住按钮向上拖动以尝试连续滚动截图，松手后生成回复。默认直接填入第一条建议；开启「提供多个回复选项」后可从三条建议中选择。输入法不会替你点击发送。
+- **快捷截图：**Android 支持时，可在系统授权无障碍服务后免去每次截图确认；授权由用户在系统页面明确开启，可随时关闭。某些应用会遮挡或禁止截图，系统限制无法绕过。
+- **记住回复输入位置：**截图前保存输入框和光标状态；返回时尽可能将生成的文字写入原位置。如果目标应用或系统不允许恢复焦点，会提供复制或手动插入的后备方式。
+- **整理回复风格：**可在 AI 设置里自定义系统提示词，让聊天建议更符合自己的语气。
 
-English | [简体中文](README_sc.md) | [繁體中文](README_tc.md)
+## 安装与开始使用
 
-## About
+1. 从上面的链接下载 `arm64` APK 并安装。大多数近年的 Android 手机选择此包；`x86_64` 主要用于模拟器。
+2. 打开「会意输入法」，按引导在系统设置中启用它，并将其切换为当前键盘。首次启动会在应用专属存储中部署方案和词库。
+3. 在输入法设置里选择全键盘或九宫格；进入「AI 设置」，填写服务地址、模型名称和自己的 API Key，然后保存。首次公开版不会附带开发者的 AI 或语音服务凭证。
+4. 回到任意可输入文字的应用，使用键盘工具栏上的「语音」「整理」「AI回复」。语音输入需授予麦克风权限；整理和截图回复需要网络以及兼容的 AI 服务。
+5. 若使用免重复确认的快捷截图，在「AI 设置」查看说明并前往 Android 系统设置，手动开启会意的无障碍服务。系统首次截图授权仍需按 Android 提示完成。
 
-Trime is originally a frontend of open-source [Android Traditional Chinese IME], based on [RIME] input method framework and written in Java/Kotlin with JNI. It is designed to protect the native language of various local dialects of Chinese and is a universal shape-based and phonetic-based input method platform.
+### AI 服务配置
 
-[Documentation](https://github.com/osfans/trime/wiki)
+应用使用 OpenAI 兼容的 Chat Completions 接口。文字整理需要支持聊天补全的模型；截图回复还需要支持图片输入的视觉模型。将服务商提供的**完整 HTTPS 接口地址**、模型名和 API Key 填入 AI 设置。语音可选腾讯云识别或兼容的音频转写接口，按服务商要求填写对应凭证。不同服务商的接口格式、模型能力、费用和数据保留策略不同，请在使用前确认。
 
-## Download
+API Key 会由 Android Keystore 加密后保存在本应用的专属配置中。请求会把用户提交的文字、录音或屏幕图像发送到所选服务商；请勿在敏感内容上使用不可信服务。快捷截图只在用户主动触发后采集屏幕。
 
-- Stable Channel <br>
-  [<img alt='Get it on F-Droid' src='https://fdroid.gitlab.io/artwork/badge/get-it-on.png' height='80px'/>](https://f-droid.org/packages/com.osfans.trime)
-  [<img alt='Google Play Download Now' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height='80px'/>](https://play.google.com/store/apps/details?id=com.osfans.trime)
+## 项目结构与开发
 
-- Nightly Channel [Download](https://github.com/osfans/trime/releases/tag/nightly)
+本项目优先开发 Android 端。桌面端和 iOS 尚未实现。代码主要位于：
 
-- Canary Channel [Download](https://github.com/osfans/trime/actions)
+- `app/src/main/java/com/osfans/trime/ai/`：AI 请求、语音、截图、回复选择和光标回填。
+- `app/src/main/assets/shared/`：Rime 方案、雾凇拼音词库和主题配置。
+- `app/src/main/java/com/osfans/trime/ui/main/settings/`：输入法设置页面。
+- `script/`：Android 构建、APK 发布和界面回归辅助脚本。
 
-- Configurations [rimerc](https://github.com/Bambooin/rimerc)
+### 构建 Android APK
 
-## History
+开发环境需要 JDK 17、Android SDK/NDK、Python 3 和 Git 子模块。克隆仓库并初始化子模块：
 
-TRIME is the abbreviation of _Tongwen RIME_ or _ThaeRv Input Method_.
-
-From the beginning, TRIME was written for TaeRv Pinyin, and named _TaeRv Input Method (泰如输入法)_.
-
-Then, we created an input method platform with some code tables, such as Wu dialect (吴语). We renamed it to _Chinese Character Dialect Input Method (汉字方言输入法)_.
-
-Later, it supports Wubi and Liangbi and other shape-based input method, we branded it [_Tongwen Input Method Platform 2.0 (同文输入法平台 2.0)_](https://github.com/osfans/trime-legacy), which implies that the phonetic-based and shape-based input method on one platform, while dialects and Mandrain share one kind of characters.
-
-Benefit from the [librime](https://github.com/rime/librime) project by JNI, we are now in version 3.0 of TRIME aka _Tongwen Input Method (同文输入法)_.
-
-Your are now welcome to [contribution](CONTRIBUTING.md) ~ !
-
-## Getting Started for developer
-
-### Prepare
-
-#### Requirements:
-
-- Android SDK and Android NDK
-  * If you are new to Android development, please install [Android Studio](https://developer.android.com/studio).
-
-- JDK (OpenJDK) 17
-- Python 3 (required by OpenCC to generate dictionary text files)
-
-#### Prerequisites for Windows
-
-Symbolic links will be created according to current build configurations, developers need:
-
-- Enable [Developer Mode](https://learn.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development) so that symlinks can be created without administrator privilege.
-
-- Enable symlink support for `git`:
-
-  ```powershell
-  git config --global core.symlinks true
-  ```
-
-If you cannot or wouldn't like to enable anything, it doesn't matter. Copying will be used instead when error on creating symbolic links.
-
-### Build
-
-#### 1. Clone this project and fetch all submodules:
-
-```sh
-git clone git@github.com:osfans/trime.git
+```powershell
+git clone https://github.com/jerrytian98-max/huiyi-ime.git
+cd huiyi-ime
 git submodule update --init --recursive
-# use partial clone to save time
-git submodule update --init --recursive --filter=blob:none
 ```
 
-#### 2. Debug version without signature:
+在 Windows 配置 `JAVA_HOME`、`ANDROID_HOME` 后构建调试包：
 
-```sh
-# On Linux or macOS
-make debug
-
-# On Windows
-.\gradlew assembleDebug
+```powershell
+./gradlew.bat :app:assembleDebug
 ```
 
-#### 3. Release version with signture:
+也可以运行 `script/Build-Android.ps1`。不提供 AI 密钥时，普通中英文输入仍可使用；AI 功能需由安装者自行配置服务。正式发布请使用自己的签名密钥，并妥善保存。
 
-Create `keystore.properties` file which contains following contents for [signing information](https://developer.android.com/studio/publish/app-signing.html):
+## 许可证与致谢
 
-```gradle.properties
-storePassword=myStorePassword
-keyPassword=mykeyPassword
-keyAlias=myKeyAlias
-storeFile=myStoreFileLocation
-```
+本项目基于 GPL-3.0-or-later 的 Trime，并包含雾凇拼音及其他采用各自许可的资源，因此项目整体保留 **GPL-3.0-or-later**，不能将整个衍生项目重新标成 MIT。各组件许可见仓库中的 `LICENSE` 文件和 `app/src/main/assets/shared/licenses/`。使用、修改或再分发时请遵守对应组件的许可证及署名要求。
 
-Then, you may run:
-
-```sh
-# On Linux or macOS
-make release
-
-# On Windows
-.\gradlew assembleRelease
-```
-
-### Troubleshooting
-
-```
-Target "boost_log_setup" links to target "Boost::coroutine" but the target was not found.
-```
-
-Run `make clean` on Linux or macOS, or run `.\gradlew clean` on Windows.
-
-Other issues:
-
-1. Try `make clean`
-2. Make sure your repo is up-to-date. If one or more submodules are modified, also make sure they are compatible with the current version.
-3. If the problem still exists(very unlikely), try to make a new clone.
-4. Check if this is there is an issue/PR related to your problem. If yes, try their solutions.
-5. If none of them works, you may make an issue to ask for help.(optional)
-
-## Acknowledgments
-
-- Developer: [osfans](https://github.com/osfans)
-- Contributors: [boboIqiqi](https://github.com/boboIqiqi)、[Bambooin](https://github.com/Bambooin)、[senchi96](https://github.com/senchi96)、[heiher](https://github.com/heiher)、[abay](https://github.com/a342191555)、[iovxw](https://github.com/iovxw)、[huyz-git](https://github.com/huyz-git)、[tumuyan](https://github.com/tumuyan)、[WhiredPlanck](https://github.com/WhiredPlanck)、[nopdan](https://github.com/nopdan)...
-- [Wiki Editors](https://github.com/osfans/trime/wiki): [xiaoqun2016](https://github.com/xiaoqun2016)、[boboIqiqi](https://github.com/boboIqiqi)...
-- Translators: 天真可爱的满满 (Chinese Traditional), 点解 (English) ...
-- Keyboard Designers: 天真可爱的满满、皛筱晓小笨鱼、吴琛 11、熊猫阿 Bo、默默ㄇㄛ ˋ...
-- Donations: See QR Code in [Releases](https://github.com/osfans/trime/releases)
-- Community: Netizens who feedback in [Issues](https://github.com/osfans/trime/issues)、[QQ Group (811142286)](https://jq.qq.com/?_wv=1027&k=AXdR80HN)、[QQ Group (224230445)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=pg_q7UVumWYLq1Rk8kIAqkK1xGt64VnX&authKey=04m9l7OBO5H5vgrEL8IbpsmtnptWM60xy%2FUwYCfyvw9VcRhe8zRzAS1ezoemZdFr&noverify=0&group_code=224230445)、[Tieba](http://tieba.baidu.com/f?kw=rime)、[Google Play](https://play.google.com/store/apps/details?id=com.osfans.trime)、[Telegram](https://t.me/trime_dev)...
-- Projects: [RIME]、[OpenCC]、[Android Traditional Chinese IME] and so on.
-
-## Third Party Libraries
-
-- [Boost C++ Libraries](https://www.boost.org/) (Boost Software License)
-- [darts-clone](https://github.com/s-yata/darts-clone) (New BSD License)
-- [LevelDB](https://github.com/google/leveldb) (New BSD License)
-- [libiconv](https://www.gnu.org/software/libiconv/) (LGPL License)
-- [marisa-trie](https://github.com/s-yata/marisa-trie) (BSD License)
-- [glog](https://github.com/google/glog) (New BSD License)
-- [OpenCC](https://github.com/BYVoid/OpenCC) (Apache License 2.0)
-- [RIME](https://rime.im) (BSD License)
-- [snappy](https://github.com/google/snappy)(BSD License)
-- [utfcpp](https://github.com/nemtrif/utfcpp) (Boost Software License)
-- [yaml-cpp](https://github.com/jbeder/yaml-cpp) (MIT License)
-- [Android Traditional Chinese IME](https://code.google.com/p/android-traditional-chinese-ime/) (Apache License 2.0)
-
-[Android Traditional Chinese IME]: https://code.google.com/p/android-traditional-chinese-ime/
-[RIME]: http://rime.im
-[OpenCC]: https://github.com/BYVoid/OpenCC
+感谢 [Trime](https://github.com/osfans/trime)、[Rime](https://rime.im)、[雾凇拼音](https://github.com/iDvel/rime-ice)、OpenCC 及相关开源社区。
