@@ -66,9 +66,10 @@ internal object AiDualPaletteChecks {
                         val configuration = Configuration(context.resources.configuration).apply { this.fontScale = fontScale }
                         val viewContext = context.createConfigurationContext(configuration)
                         val scope = ThemeScope(theme).apply { updateScheme(theme.presetColorSchemes.getValue("default")) }
-                        val clicks = IntArray(3)
-                        val ui = AlwaysUi(viewContext, scope, onAiVoice = { clicks[0]++ }, onAiPolish = { clicks[1]++ }, onAiScreen = { clicks[2]++ })
-                        val descriptions = listOf("语音输入和 AI 整理", "AI 整理输入框文字或选中文字", "AI回复")
+                        val clicks = IntArray(2)
+                        val ui = AlwaysUi(viewContext, scope, onAiPolish = { clicks[0]++ }, onAiScreen = { clicks[1]++ })
+                        check(ui.root.children.none { it.contentDescription?.startsWith("语音") == true })
+                        val descriptions = listOf("AI 整理输入框文字或选中文字", "AI回复")
                         val buttons = descriptions.map { description -> ui.root.children.single { it.contentDescription?.startsWith(description) == true } as LinearLayout }
                         for (scheme in listOf("default", "dark")) {
                             scope.updateScheme(theme.presetColorSchemes.getValue(scheme))
@@ -94,7 +95,7 @@ internal object AiDualPaletteChecks {
                                         check(icon.imageTintList?.defaultColor == scope.colors.candidateTextColor)
                                         check(label.currentTextColor == scope.colors.candidateTextColor)
                                         check(icon.width > 0 && label.width > 0)
-                                        if (index == 2) {
+                                        if (index == 1) {
                                             check(label.text.toString() == "AI回复")
                                             check(label.layout.getEllipsisCount(0) == 0) { "AI reply label is clipped" }
                                         }
@@ -114,7 +115,7 @@ internal object AiDualPaletteChecks {
                                 }
                             }
                         }
-                        check(clicks.toList() == listOf(12, 12, 12))
+                        check(clicks.toList() == listOf(12, 12))
                     }
                     rows += "PASS: both palettes have readable AI buttons, disabled labels, editable text, hints and dialog reply rows"
                 } finally {

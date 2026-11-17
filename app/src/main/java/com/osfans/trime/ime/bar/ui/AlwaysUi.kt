@@ -47,7 +47,6 @@ class AlwaysUi(
     override val ctx: Context,
     private val scope: ThemeScope,
     private val onButtonClick: ((String) -> Unit)? = null,
-    private val onAiVoice: (() -> Unit)? = null,
     private val onAiScreen: (() -> Unit)? = null,
     private val onAiSettings: (() -> Unit)? = null,
     private val onAiPolish: (() -> Unit)? = null,
@@ -141,11 +140,10 @@ class AlwaysUi(
 
     private fun aiButton(label: String, @DrawableRes icon: Int, click: (() -> Unit)?): AiButton = AiButton(ctx, label, icon).apply {
         contentDescription = when (label) {
-            "语音" -> "语音输入和 AI 整理"
             "整理" -> "AI 整理输入框文字或选中文字"
             else -> "AI回复"
         }
-        styleAiButton(this, label == "语音")
+        styleAiButton(this)
         setOnClickListener { click?.invoke() }
         setOnLongClickListener {
             onAiSettings?.invoke()
@@ -153,19 +151,18 @@ class AlwaysUi(
         }
     }
 
-    private fun styleAiButton(view: AiButton, primary: Boolean) {
+    private fun styleAiButton(view: AiButton) {
         val accent = scope.colors.hilitedTextColor
         val foreground = scope.colors.candidateTextColor
         view.labelView.setTextColor(foreground)
         view.iconView.imageTintList = ColorStateList.valueOf(foreground)
         val shape = GradientDrawable().apply {
             cornerRadius = ctx.dp(8).toFloat()
-            setColor(if (primary) ColorUtils.setAlphaComponent(accent, 22) else android.graphics.Color.TRANSPARENT)
+            setColor(android.graphics.Color.TRANSPARENT)
         }
         view.background = RippleDrawable(ColorStateList.valueOf(ColorUtils.setAlphaComponent(accent, 28)), InsetDrawable(shape, ctx.dp(2), ctx.dp(4), ctx.dp(2), ctx.dp(4)), null)
     }
 
-    private val voiceButton = aiButton("语音", R.drawable.ic_ai_mic, onAiVoice)
     private val screenButton = aiButton("AI回复", R.drawable.ic_ai_screen, onAiScreen).apply {
         TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(labelView, 10, 13, 1, TypedValue.COMPLEX_UNIT_SP)
         val gesture = ScreenCaptureGesture(
@@ -207,13 +204,6 @@ class AlwaysUi(
             },
         )
         add(
-            voiceButton,
-            lParams(ctx.dp(80), matchParent) {
-                after(leftMostButton)
-                centerVertically()
-            },
-        )
-        add(
             screenButton,
             lParams(ctx.dp(80), matchParent) {
                 after(polishButton)
@@ -223,7 +213,7 @@ class AlwaysUi(
         add(
             polishButton,
             lParams(ctx.dp(80), matchParent) {
-                after(voiceButton)
+                after(leftMostButton)
                 centerVertically()
             },
         )
@@ -270,9 +260,8 @@ class AlwaysUi(
     /** Restyles the toolbar area after a scheme switch. */
     fun refreshColors() {
         leftMostButton.refreshColors()
-        styleAiButton(voiceButton, true)
-        styleAiButton(screenButton, false)
-        styleAiButton(polishButton, false)
+        styleAiButton(screenButton)
+        styleAiButton(polishButton)
         hideKeyboardButton.refreshColors()
         buttonsUi.refreshColors()
         clipboardUi.refreshColors()

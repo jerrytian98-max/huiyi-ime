@@ -144,7 +144,6 @@ class InputBarDelegate(override val di: DI) :
                     windowManager.attachWindow(SwitchOptionWindow(di))
                 }
             },
-            onAiVoice = { service.aiInputController.startVoice() },
             onAiPolish = { service.aiInputController.polishSelection() },
             onAiScreen = { service.aiInputController.startScreenAnalysis() },
             onAiLongScreenStart = { top, status -> service.aiInputController.startLongScreenAnalysis(top, status) },
