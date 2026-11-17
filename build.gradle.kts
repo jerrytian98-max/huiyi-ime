@@ -15,8 +15,17 @@ plugins {
 
 spotless {
     kotlin {
-        target("**/*.kt", "**/*.kts")
-        targetExclude("build-logic/convention/build/**")
+        target(
+            fileTree("app/src/main/java") { include("**/*.kt") },
+            fileTree("app/src/test/java") { include("**/*.kt") },
+            fileTree("app/src/androidTest/java") { include("**/*.kt") },
+            fileTree("codegen/src") { include("**/*.kt") },
+            fileTree("build-logic") {
+                include("**/*.kt", "**/*.kts")
+                exclude("**/build/**", "**/.gradle/**")
+            },
+            files("build.gradle.kts", "settings.gradle.kts", "app/build.gradle.kts", "codegen/build.gradle.kts"),
+        )
         ktlint("1.8.0")
     }
 }

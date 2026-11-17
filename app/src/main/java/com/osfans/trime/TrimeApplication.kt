@@ -17,6 +17,7 @@ import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import com.osfans.trime.core.data.DataStorageMode
 import com.osfans.trime.daemon.RimeDaemon
 import com.osfans.trime.data.db.ClipboardHelper
 import com.osfans.trime.data.db.CollectionHelper
@@ -28,6 +29,7 @@ import com.osfans.trime.ui.main.LogActivity
 import com.osfans.trime.util.isNightMode
 import com.osfans.trime.worker.BackgroundSyncWork
 import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
@@ -173,6 +175,9 @@ class TrimeApplication : Application() {
             Timber.d("isDirectBootMode=$isDirectBootMode")
 
             val appPrefs = AppPrefs.initDefault(sharedPreferences)
+            // The runtime data already lives in app-specific storage, including in legacy
+            // external-sync mode. Keep those files and the old folder reference untouched.
+            appPrefs.profile.dataStorageMode.setValue(DataStorageMode.APP_STORAGE)
             // record last pid for crash logs
             appPrefs.internal.pid.apply {
                 val currentPid = Process.myPid()
@@ -205,7 +210,8 @@ class TrimeApplication : Application() {
 
     private fun startWorkManager() {
         if (isDirectBootMode) return
-        coroutineScope.launch {
+        // WorkManager opens Room and creates its schedulers; keep cold-start IO off the IME thread.
+        coroutineScope.launch(Dispatchers.IO) {
             BackgroundSyncWork.start(directBootAwareContext)
         }
     }

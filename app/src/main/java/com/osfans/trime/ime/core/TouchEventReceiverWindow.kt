@@ -9,6 +9,7 @@ import android.annotation.SuppressLint
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
+import android.view.WindowManager
 import android.widget.PopupWindow
 
 class TouchEventReceiverWindow(
@@ -30,6 +31,27 @@ class TouchEventReceiverWindow(
     private var isWindowShowing = false
 
     private val cachedLocation = intArrayOf(0, 0)
+    private var pendingBounds: IntArray? = null
+
+    init {
+        contentView.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
+            override fun onViewAttachedToWindow(view: View) {
+                view.post {
+                    pendingBounds?.let { bounds ->
+                        if (bounds[2] > 0 && bounds[3] > 0) {
+                            showAt(bounds[0], bounds[1], bounds[2], bounds[3])
+                        } else {
+                            show()
+                        }
+                    }
+                }
+            }
+            override fun onViewDetachedFromWindow(view: View) {
+                isWindowShowing = false
+                window.dismiss()
+            }
+        })
+    }
 
     fun showAt(
         x: Int,
@@ -37,13 +59,22 @@ class TouchEventReceiverWindow(
         w: Int,
         h: Int,
     ) {
-        isWindowShowing = true
-        if (window.isShowing) {
-            window.update(x, y, w, h)
-        } else {
-            window.width = w
-            window.height = h
-            window.showAtLocation(contentView, Gravity.TOP or Gravity.START, x, y)
+        pendingBounds = intArrayOf(x, y, w, h)
+        // Rime messages can arrive before attach or after the input view is replaced.
+        if (!contentView.isAttachedToWindow || contentView.windowToken == null || w <= 0 || h <= 0) return
+        try {
+            if (window.isShowing) {
+                window.update(x, y, w, h)
+            } else {
+                window.width = w
+                window.height = h
+                window.showAtLocation(contentView, Gravity.TOP or Gravity.START, x, y)
+            }
+            isWindowShowing = true
+        } catch (_: WindowManager.BadTokenException) {
+            // The system may invalidate the token while an editor/window is closing.
+            runCatching { window.dismiss() }
+            isWindowShowing = false
         }
     }
 
@@ -55,6 +86,7 @@ class TouchEventReceiverWindow(
     }
 
     fun dismiss() {
+        pendingBounds = null
         if (isWindowShowing) {
             isWindowShowing = false
             window.dismiss()

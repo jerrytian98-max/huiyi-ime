@@ -8,7 +8,6 @@ package com.osfans.trime.ui.setup
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
@@ -19,11 +18,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.osfans.trime.R
-import com.osfans.trime.core.data.UserDataManager
 import com.osfans.trime.databinding.ActivitySetupBinding
 import com.osfans.trime.ui.main.MainActivity
 import com.osfans.trime.ui.setup.SetupPage.Companion.firstUndonePage
@@ -31,11 +28,6 @@ import com.osfans.trime.ui.setup.SetupPage.Companion.isLastPage
 import com.osfans.trime.util.appContext
 import com.osfans.trime.util.createNotificationChannel
 import com.osfans.trime.util.startActivity
-import com.osfans.trime.util.toast
-import io.github.whiredplanck.storageaccess.StorageAccess
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import splitties.systemservices.notificationManager
 
 class SetupActivity : FragmentActivity() {
@@ -44,33 +36,6 @@ class SetupActivity : FragmentActivity() {
     private lateinit var skipButton: Button
     private lateinit var prevButton: Button
     private lateinit var nextButton: Button
-
-    private val storageAccess = StorageAccess(this)
-
-    fun pickDataPath() {
-        lifecycleScope.launch {
-            val picked = storageAccess.pickDirectory() ?: return@launch
-            runCatching {
-                UserDataManager.persistTreeUri(picked.uri)
-                check(UserDataManager.sync())
-                refreshCurrentFragment()
-                updateButtons()
-                toast(R.string.setup__data_path_imported)
-                skipButton.visibility = View.VISIBLE
-            }.onFailure {
-                // Keep the picked folder: the user is not forced to pick again, and a folder that
-                // keeps failing makes the deploy path fall back to app-specific storage on its own.
-                refreshCurrentFragment()
-                updateButtons()
-                toast(R.string.setup__data_path_import_failed)
-            }
-        }
-    }
-
-    fun refreshCurrentFragment() {
-        val fragment = supportFragmentManager.findFragmentByTag("f${viewPager.currentItem}")
-        (fragment as? SetupFragment)?.sync()
-    }
 
     private fun completeSetup() {
         startActivity<MainActivity>()
@@ -146,17 +111,13 @@ class SetupActivity : FragmentActivity() {
 
     fun updateButtons() {
         val allDone = !SetupPage.hasUndonePage()
-        val modeSetupDone = SetupPage.Mode.isDone()
         val isFirstPage = viewPager.currentItem == 0
         val isLastPage = viewPager.currentItem.isLastPage()
 
-        viewPager.isUserInputEnabled = modeSetupDone
-
         prevButton.isGone = isFirstPage
-        skipButton.isGone = !modeSetupDone || allDone
+        skipButton.isGone = allDone
         nextButton.text = getString(if (isLastPage) R.string.done else R.string.setup__next)
         nextButton.isGone = isLastPage && !allDone
-        nextButton.isEnabled = modeSetupDone
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {

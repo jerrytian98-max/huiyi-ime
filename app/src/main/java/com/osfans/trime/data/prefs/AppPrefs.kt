@@ -123,6 +123,7 @@ class AppPrefs(
         shared: SharedPreferences,
     ) : PreferenceDelegateOwner(shared, R.string.virtual_keyboard) {
         companion object {
+            const val PINYIN_LAYOUT = "keyboard_pinyin_layout"
             const val LANDSCAPE_MODE = "keyboard_landscape_mode"
             const val SPLIT_SPACE_PERCENT = "keyboard_split_space"
 
@@ -164,6 +165,13 @@ class AppPrefs(
             const val MAX_SPAN_COUNT_LANDSCAPE = "max_span_count_landscape"
             const val HORIZONTAL_CANDIDATE_MODE = "horizontal_candidate_mode"
         }
+
+        enum class PinyinLayout(override val stringRes: Int, val schemaId: String) : PreferenceDelegateEnum {
+            QWERTY(R.string.pinyin_layout_qwerty, "rime_ice"),
+            T9(R.string.pinyin_layout_t9, "rime_ice_t9"),
+        }
+
+        val pinyinLayout = enum(R.string.pinyin_keyboard_layout, PINYIN_LAYOUT, PinyinLayout.QWERTY)
 
         enum class LandscapeMode(override val stringRes: Int) : PreferenceDelegateEnum {
             NEVER(R.string.never),
@@ -375,7 +383,7 @@ class AppPrefs(
             const val LAST_BACKGROUND_SYNC_TIME = "last_background_sync_time"
         }
 
-        val dataStorageMode = enum(R.string.data_storage_mode, DATA_STORAGE_MODE, DataStorageMode.EXTERNAL_SYNC)
+        val dataStorageMode = enum(R.string.data_storage_mode, DATA_STORAGE_MODE, DataStorageMode.APP_STORAGE)
         val externalRimeTreeUri = string(EXTERNAL_RIME_TREE_URI, "")
         val periodicBackgroundSync = bool(PERIODIC_BACKGROUND_SYNC, false)
         val periodicBackgroundSyncInterval = int(PERIODIC_BACKGROUND_SYNC_INTERVAL, 30)

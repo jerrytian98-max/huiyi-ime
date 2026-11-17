@@ -58,7 +58,7 @@ class GeneralStyleTest :
                 }
 
                 Then("theme header is decoded") {
-                    theme.name shouldBe "預設"
+                    theme.name shouldBe "预设"
                 }
             }
         }

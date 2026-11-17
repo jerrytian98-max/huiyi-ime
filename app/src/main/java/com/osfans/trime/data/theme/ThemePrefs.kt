@@ -15,11 +15,32 @@ import com.osfans.trime.data.prefs.PreferenceDelegateOwner
 class ThemePrefs(
     sharedPrefs: SharedPreferences,
 ) : PreferenceDelegateOwner(sharedPrefs, R.string.theme) {
+    init {
+        if (!sharedPrefs.getBoolean("ai_light_theme_applied", false)) {
+            sharedPrefs.edit {
+                if (sharedPrefs.getString(SELECTED_THEME, "trime") == "trime" && sharedPrefs.getString(NORMAL_MODE_COLOR, "default") == "default") {
+                    putString(SELECTED_THEME, "rime_ai.trime")
+                }
+                putBoolean("ai_light_theme_applied", true)
+            }
+        }
+        if (!sharedPrefs.getBoolean(DUAL_PALETTE_APPLIED, false)) {
+            val themeId = sharedPrefs.getString(SELECTED_THEME, "rime_ai.trime").orEmpty().removeSuffix(".trime")
+            sharedPrefs.edit {
+                if (themeId in setOf("rime_ai", "trime", "tongwenfeng")) {
+                    putString(NORMAL_MODE_COLOR, "default")
+                    putBoolean(FOLLOW_SYSTEM_DAY_NIGHT, false)
+                }
+                putBoolean(DUAL_PALETTE_APPLIED, true)
+            }
+        }
+    }
+
     val selectedTheme =
         string(
             R.string.selected_theme,
             SELECTED_THEME,
-            "trime",
+            "rime_ai.trime",
             R.string.selected_theme_summary,
         )
 
@@ -65,6 +86,7 @@ class ThemePrefs(
         )
 
     companion object {
+        const val DUAL_PALETTE_APPLIED = "huiyi_dual_palette_v1"
         const val SELECTED_THEME = "selected_theme"
         const val NORMAL_MODE_COLOR = "normal_mode_color"
         const val FOLLOW_SYSTEM_DAY_NIGHT = "follow_system_day_night"

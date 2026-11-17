@@ -165,6 +165,7 @@ object ThemeManager {
         val ctx = appContext.createDeviceProtectedStorageContext()
         val sp = PreferenceManager.getDefaultSharedPreferences(ctx)
         sp.edit {
+            putBoolean(ThemePrefs.DUAL_PALETTE_APPLIED, prefs.normalModeColor.sharedPreferences.getBoolean(ThemePrefs.DUAL_PALETTE_APPLIED, false))
             prefs.preferenceDelegates.forEach {
                 it.value.putValueTo(this@edit)
             }

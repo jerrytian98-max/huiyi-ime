@@ -82,6 +82,7 @@ class KeyboardWindow(di: DI) :
     private var currentKeyboardId = ""
     private var lastKeyboardId = ""
     private var lastLockKeyboardId = ""
+    private var lastT9PrimaryKeyboardId = ""
     private var tempAsciiMode: Boolean? = null
     private val cachedKeyboards = mutableMapOf<String, Pair<Keyboard, KeyboardView>>()
     private val activeKeyboard: Keyboard? get() = cachedKeyboards[currentKeyboardId]?.first
@@ -165,6 +166,9 @@ class KeyboardWindow(di: DI) :
     private fun attachKeyboard(target: String) {
         currentKeyboardId = target
         lastKeyboardId = target
+        if (rime.run { statusCached }.schemaId == "rime_ice_t9" && (target == "rime_ice_t9" || target == "huiyi_ascii")) {
+            lastT9PrimaryKeyboardId = target
+        }
 
         val config = selectKeyboardConfig(target)
         val keyboard = activeKeyboard ?: Keyboard(context, theme, computeAllowedWidth(), config)
@@ -204,6 +208,11 @@ class KeyboardWindow(di: DI) :
     private fun smartMatchKeyboard(): String {
         // 主题的布局中包含方案id，直接采用
         val currentSchema = rime.run { statusCached }.schemaId
+        // Number/symbol boards temporarily enable ASCII; return to the user's prior language.
+        if (currentSchema == "rime_ice_t9" && currentKeyboardId != "rime_ice_t9" && currentKeyboardId != "huiyi_ascii" && lastT9PrimaryKeyboardId.isNotEmpty()) {
+            return lastT9PrimaryKeyboardId
+        }
+        if (currentSchema == "rime_ice_t9" && rime.run { statusCached }.isAsciiMode && presetKeyboardIds.contains("huiyi_ascii")) return "huiyi_ascii"
         if (presetKeyboardIds.contains(currentSchema)) {
             return currentSchema
         }
@@ -248,7 +257,13 @@ class KeyboardWindow(di: DI) :
 
                 else -> {
                     id.ifEmpty {
-                        if (activeKeyboard?.isLock == true) currentKeyboardId else lastLockKeyboardId
+                        if (rime.run { statusCached }.schemaId == "rime_ice_t9") {
+                            smartMatchKeyboard()
+                        } else if (activeKeyboard?.isLock == true) {
+                            currentKeyboardId
+                        } else {
+                            lastLockKeyboardId
+                        }
                     }
                 }
             }
@@ -376,11 +391,18 @@ class KeyboardWindow(di: DI) :
     }
 
     override fun onRimeSchemaUpdated(schema: SchemaItem) {
+        lastT9PrimaryKeyboardId = ""
+        val layout = com.osfans.trime.data.prefs.AppPrefs.Keyboard.PinyinLayout.entries.firstOrNull { it.schemaId == schema.id }
+        if (layout != null) com.osfans.trime.data.prefs.AppPrefs.defaultInstance().keyboard.pinyinLayout.setValue(layout)
         switchKeyboard(".default")
     }
 
     override fun onRimeOptionUpdated(value: RimeMessage.OptionMessage.Data) {
         val option = value.option
+        if (option == "ascii_mode" && rime.run { statusCached }.schemaId == "rime_ice_t9") {
+            if (value.value && currentKeyboardId == "rime_ice_t9") switchKeyboard(".ascii")
+            if (!value.value && currentKeyboardId == "huiyi_ascii") switchKeyboard(".default")
+        }
         when {
             option.startsWith("_keyboard_") -> {
                 val target = option.removePrefix("_keyboard_")

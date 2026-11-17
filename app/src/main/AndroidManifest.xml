@@ -11,24 +11,35 @@ SPDX-License-Identifier: GPL-3.0-or-later
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
 
     <queries>
+        <intent>
+            <action android:name="android.speech.action.RECOGNIZE_SPEECH" />
+        </intent>
         <intent>
             <action android:name="android.intent.action.TTS_SERVICE" />
         </intent>
         <intent>
             <action android:name="android.view.InputMethod" />
         </intent>
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
+        </intent>
     </queries>
 
     <application
         android:name="com.osfans.trime.TrimeApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_app_icon"
         android:label="@string/trime_app_name"
         android:roundIcon="@mipmap/ic_app_icon_round"
         android:theme="@style/Theme.TrimeAppTheme"
         android:hasFragileUserData="true"
+        android:usesCleartextTraffic="false"
         tools:targetApi="29">
 
         <service
@@ -112,6 +123,35 @@ SPDX-License-Identifier: GPL-3.0-or-later
             android:taskAffinity=".ui.main.LiquidKeyboardEditActivity"
             android:theme="@style/Theme.DialogTheme"
             android:windowSoftInputMode="stateAlwaysVisible|adjustPan" />
+
+        <activity android:name=".ai.AiSettingsActivity" android:exported="false"
+            android:theme="@android:style/Theme.Material.Light.NoActionBar" />
+        <activity android:name=".ai.AiSystemSpeechActivity" android:exported="false"
+            android:excludeFromRecents="true" android:theme="@android:style/Theme.Material.Light.NoActionBar" />
+        <activity android:name=".ai.AiMicrophonePermissionActivity" android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name=".ai.AiCaptureActivity" android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name=".ai.AiReplyActivity" android:exported="false"
+            android:theme="@style/Theme.HuiyiAiReplyLight" />
+        <activity android:name=".ai.AiTextReviewActivity" android:exported="false"
+            android:launchMode="singleTop" android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.Material.Light.NoActionBar" />
+        <service android:name=".ai.AiCaptureService" android:exported="false"
+            android:foregroundServiceType="mediaProjection" />
+
+        <service android:name=".ai.AiAccessibilityCaptureService"
+            tools:targetApi="r"
+            android:enabled="@bool/supports_quick_capture"
+            android:exported="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:label="@string/ai_quick_capture_name">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data android:name="android.accessibilityservice"
+                android:resource="@xml/ai_accessibility_capture" />
+        </service>
 
         <!-- Using an activity alias to disable/enable the app icon in the launcher -->
         <activity-alias

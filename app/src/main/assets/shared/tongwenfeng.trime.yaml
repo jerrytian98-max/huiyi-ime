@@ -27,7 +27,7 @@ round_corner:
   
 #界面风格、功能开关
 style:
-  auto_caps: false #自動句首大寫:true|false
+  auto_caps: false #自动句首大写:true|false
   candidate_font: han.ttf  #候选字体
   candidate_padding: 5  #候选项内边距
   candidate_spacing: 0.0  #候选分割线
@@ -163,715 +163,132 @@ colors:
 #配色方案
 preset_color_schemes:
   default:
-    name: "标准配色！"  #方案名称
-    author: 风花絮 #作者信息
-    dark_scheme: steam
-    back_color: *color2 #候选区背景状态栏
-    candidate_separator_color: *color2 #候选分割背景
-    candidate_text_color: *color1 #候选文本
-    comment_text_color: *color3 #提示
-    hilited_back_color: *color2 #高亮编码背景
-    hilited_candidate_back_color: *color6 #高亮候选背景
-    hilited_candidate_text_color: *color2 #高亮候选文本
-    hilited_comment_text_color: *color1 #高亮提示
-    hilited_key_back_color: *color6 #高亮按键背景
-    hilited_key_symbol_color: *color2 #高亮按键符号
-    hilited_key_text_color: *color1 #高亮按键文本
-    hilited_off_key_back_color: *color2 #高亮按键关闭状态背景
-    hilited_off_key_text_color: *color1 #高亮按键关闭状态文本
-    hilited_text_color: *color1 #高亮编码
-    key_back_color: *color2 #按键背景
-    key_symbol_color: *color8 #按键符号
-    key_text_color: *color1 #按键文本
-    keyboard_back_color: *color3 #键盘背景
-    label_color: *color6 #标签
-    off_key_back_color: *color4  #按键关闭状态背景
-    off_key_text_color: *color8 #按键关闭状态文本
-    preview_back_color: *color4 #按键提示背景
-    preview_text_color: *color6 #按键提示文本
-    text_color: *color6 #编码
-    text_back_color: *color2 #编码区背景
-    bkg: *color2 #空格键背景色
-    tkg: *color1 #空格键文字颜色
-    benter: *color6 #回车键背景色
-    tenter: *color2 #回车键文字颜色
-    bgn: *color4 #功能键背景色
-    tgn: *color2 #功能键文字颜色
-    bbs: *color4 #退格键背景色
-    tbs: *color2 #退格键文字颜色
-    baoe: *color2 #aoeiu背景色
-    taoe: *color6 #aoeiu文字颜色
-    bh1: *color2 #第一行背景色
-    th1: *color1 #第一行文字颜色
-    bh2: *color2 #第二行背景色
-    th2: *color1 #第二行文字颜色
-    bh3: *color2 #第三行背景色
-    th3: *color1 #第三行文字颜色
-    bh4: *color2 #第四行背景色
-    th4: *color1 #第四行文字颜色
-
-#--------配色开始----------------#
-  yushe:
-    name: 預設／default #方案名稱
-    author: osfans #作者資訊
-    back_color: 0xffe4e7e9 #候選區背景
-    border_color: 0xffc1c7ca #邊框
-    candidate_separator_color: 0xffc1c7ca #候選分割背景
-    candidate_text_color: 0xff5a676e #候選文字
-    comment_text_color: 0xff7b868c #提示
-    hilited_back_color: 0xccd3d7da #標明編碼背景
-    hilited_candidate_back_color: 0xffd3d7da #標明候選背景
-    hilited_candidate_text_color: 0xff000000 #標明候選文字
-    hilited_comment_text_color: 0xff000000 #標明提示
-    hilited_key_back_color: 0xffd3d7da #標明按鍵背景
-    hilited_key_border_color: 0xffeceff1 #標明按鍵邊框
-    hilited_key_symbol_color: 0xff000000 #標明按鍵符號
-    hilited_key_text_color: 0xff000000 #標明按鍵文字
-    hilited_off_key_back_color: 0xffd3d7da #標明按鍵關閉狀態背景
-    hilited_off_key_border_color: 0xffeceff1 #標明按鍵關閉狀態邊框
-    hilited_off_key_text_color: 0xff000000 #標明按鍵關閉狀態文字
-    hilited_on_key_back_color: 0xffd3d7da #標明按鍵打開狀態背景
-    hilited_on_key_border_color: 0xffeceff1 #標明按鍵打開狀態邊框
-    hilited_on_key_text_color: 0xff000000 #標明按鍵打開狀態文字
-    hilited_text_color: 0xff23948e #標明編碼
-    key_back_color: 0xffeceff1 #按鍵背景
-    key_border_color: 0xffeceff1 #按鍵邊框
-    key_symbol_color: 0xff5f6b73 #按鍵符號
-    key_text_color: 0xff37474f #按鍵文字
-    keyboard_back_color: 0xffffffff #鍵盤背景
-    label_color: 0xff000000 #標籤
-    off_key_back_color: 0xffd3d7da #按鍵關閉狀態背景
-    off_key_border_color: 0xffeceff1 #按鍵關閉狀態邊框
-    off_key_text_color: 0xff000000 #按鍵關閉狀態文字
-    on_key_back_color: 0xff23948e #按鍵打開狀態背景
-    on_key_border_color: 0xffeceff1 #按鍵打開狀態邊框
-    on_key_text_color: 0xff37474f #按鍵打開狀態文字
-    preview_back_color: 0x55bfbfbf #按鍵提示背景
-    preview_text_color: 0xff23948e #按鍵提示文字
-    shadow_color: 0xff000000 #陰影
-    text_color: 0xff5a676e #編碼
-    text_back_color: 0xcce4e7e9 #編碼區背景
-
-  aqua:
-    name: 碧水／Aqua
-    author: 佛振 <chen.sst@gmail.com>
-    text_color: 0xff000000
-    back_color: 0xffeeeeec
-    border_color: 0xffe0e0e0
-    hilited_text_color: 0xff000000
-    hilited_back_color: 0xffd4d4d4
-    hilited_candidate_text_color: 0xffffffff
-    hilited_candidate_back_color: 0xff0a3afa
-
-  azure:
-    name: 青天／Azure
-    author: 佛振 <chen.sst@gmail.com>
-    text_color: 0xffcae8ff
-    candidate_text_color: 0xffeef8ff
-    back_color: 0xff014e8b
-    border_color: 0xff014e8b
-    hilited_text_color: 0xffeef8ff
-    hilited_back_color: 0xff014e8b
-    hilited_candidate_text_color: 0xfffffe7f
-    hilited_candidate_back_color: 0xff015ea9
-    comment_text_color: 0xff6496c6
-
-  luna:
-    name: 明月／Luna
-    author: 佛振 <chen.sst@gmail.com>
-    text_color: 0xff000000
-    back_color: 0xffffffff
-    border_color: 0xffcccccc
-    hilited_text_color: 0xff000000
-    hilited_back_color: 0xffffff7f
-    hilited_candidate_text_color: 0xffffffff
-    hilited_candidate_back_color: 0xff000000
-
-  ink:
-    name: 墨池／Ink
-    author: 佛振 <chen.sst@gmail.com>
-    text_color: 0xff000000
-    back_color: 0xffffffff
-    border_color: 0xff000000
-    hilited_text_color: 0xff000000
-    hilited_back_color: 0xffdddddd
-    hilited_candidate_text_color: 0xffffffff
-    hilited_candidate_back_color: 0xff000000
-
-  lost_temple:
-    name: 孤寺／Lost Temple
-    author: 佛振 <chen.sst@gmail.com>, based on ir_black
-    text_color: 0xfff6f3e8
-    back_color: 0xff444444
-    border_color: 0xff444444
-    hilited_text_color: 0xffcae682
-    hilited_back_color: 0xff222222
-    hilited_candidate_text_color: 0xff000000
-    hilited_candidate_back_color: 0xffcae682
-
-  dark_temple:
-    name: 暗堂／Dark Temple
-    author: 佛振 <chen.sst@gmail.com>, based on ir_black
-    text_color: 0xffdaf692
-    candidate_text_color: 0xffe6e3d8
-    back_color: 0xff222222
-    border_color: 0xff222222
-    hilited_text_color: 0xff9acfff
-    hilited_back_color: 0xff222222
-    hilited_candidate_text_color: 0xffdaf692
-    hilited_candidate_back_color: 0xff333333
-    comment_text_color: 0xffff6c60
-
-  starcraft:
-    name: 星際我爭霸／StarCraft
-    author: Contralisk <contralisk@gmail.com>, original artwork by Blizzard Entertainment
-    text_color: 0xff88aacc
-    candidate_text_color: 0xff55bb30
-    back_color: 0xff000000
-    border_color: 0xffa01010
-    hilited_text_color: 0xff96cbfe
-    hilited_back_color: 0xff000000
-    hilited_candidate_text_color: 0xffa8ff60
-    hilited_candidate_back_color: 0xff000000
-
-  google:
-    name: 谷歌／Google
-    author: skoj <skoj@qq.com>
-    text_color: 0xff666666
-    candidate_text_color: 0xff000000
-    back_color: 0xffFFFFFF
-    border_color: 0xffE2E2E2
-    hilited_text_color: 0xff000000
-    hilited_back_color: 0xffFFFFFF
-    hilited_candidate_text_color: 0xffFFFFFF
-    hilited_candidate_back_color: 0xff3975CE
-
-  solarized_rock:
-    name: 曬經石／Solarized Rock
-    author: "Aben <tntaben@gmail.com>, based on Ethan Schoonover's Solarized color scheme"
-    back_color: 0xff002b36
-    border_color: 0xff002b36
-    text_color: 0xff859900
-    hilited_text_color: 0xff2aa198
-    candidate_text_color: 0xff839496
-    hilited_candidate_text_color: 0xffffffff
-    hilited_candidate_back_color: 0xffd33682
-
-  tintin:
-    name: "丁丁／ Tintin"
-    author: "Patricivs <ipatrickmac@me.com>"
-    text_color: 0xffffffff
-    back_color: 0xff0095d9
-    border_color: 0xff0095d9
-    label_color: 0xffffffff
-    candidate_text_color: 0xffffffff
-    comment_text_color: 0xffffffff
-    hilited_text_color: 0xff91d8f7
-    hilited_back_color: 0xff0095d9
-    hilited_candidate_text_color: 0xffffffff
-    hilited_comment_text_color: 0xffffffff
-    hilited_candidate_back_color: 0xfff16421
-
-  dota_2:
-    name: "DOTA 2"
-    author: "Patricivs <ipatrickmac@me.com>"
-    text_color: 0xffffffff
-    back_color: 0xff100f12
-    border_color: 0xff100f12
-    label_color: 0xff8f755c
-    hilited_text_color: 0xffdd4118
-    hilited_back_color: 0xff100f12
-    candidate_text_color: 0xff8f755c
-    comment_text_color: 0xff8f755c
-    hilited_candidate_text_color: 0xffffffff
-    hilited_comment_text_color: 0xffffffff
-    hilited_candidate_back_color: 0xffdd4118
-
-  brasil:
-    name: "笆悉／Brasil"
-    author: "Patricivs <ipatrickmac@me.com>"
-    text_color: 0xffffffff
-    back_color: 0xff119355
-    border_color: 0xff119355
-    label_color: 0xffffffff
-    hilited_text_color: 0xffffffff
-    hilited_back_color: 0xff17367d
-    candidate_text_color: 0xffffffff
-    comment_text_color: 0xffffffff
-    hilited_candidate_text_color: 0xffffffff
-    hilited_comment_text_color: 0xffffffff
-    hilited_candidate_back_color: 0xfff7c716
-
-  doraemon:
-    name: "銅鑼衛門／Doraemon"
-    author: "Patricivs <ipatrickmac@me.com>"
-    text_color: 0xffe50012
-    back_color: 0xffffffff
-    border_color: 0xff009fe8
-    label_color: 0xff009fe8
-    hilited_text_color: 0xffffffff
-    hilited_back_color: 0xffe50012
-    candidate_text_color: 0xff009fe8
-    comment_text_color: 0xff009fe8
-    hilited_candidate_text_color: 0xffffffff
-    hilited_comment_text_color: 0xffffffff
-    hilited_candidate_back_color: 0xff009fe8
-
-  espagna:
-    name: "埃斯巴尼亞／España"
-    author: "Patricivs <ipatrickmac@me.com>"
-    text_color: 0xffffffff
-    back_color: 0xffc30d23
-    border_color: 0xffc30d23
-    label_color: 0xffffffff
-    hilited_text_color: 0xffffffff
-    hilited_back_color: 0xfff7b52c
-    candidate_text_color: 0xffffffff
-    comment_text_color: 0xffffffff
-    hilited_candidate_text_color: 0xffffffff
-    hilited_comment_text_color: 0xffffffff
-    hilited_candidate_back_color: 0xfff7b52c
-
-  gholabok:
-    name: "胡蘿菔／Gholabok"
-    author: "Patricivs <ipatrickmac@me.com>"
-    text_color: 0xffffffff
-    back_color: 0xffe83929
-    border_color: 0xffe83929
-    label_color: 0xffffffff
-    hilited_text_color: 0xffffffff
-    hilited_back_color: 0xff007b43
-    candidate_text_color: 0xffffffff
-    comment_text_color: 0xffffffff
-    hilited_candidate_text_color: 0xffffffff
-    hilited_comment_text_color: 0xffffffff
-    hilited_candidate_back_color: 0xffed6d3d
-
-  kuma_shuzboz:
-    name: "熊出沒／Kuma Shuzboz"
-    author: "Patricivs <ipatrickmac@me.com>"
-    text_color: 0xff000000
-    back_color: 0xfff8b62d
-    border_color: 0xfff8b62d
-    label_color: 0xffffffff
-    hilited_text_color: 0xfff8b62d
-    hilited_back_color: 0xffffffff
-    candidate_text_color: 0xffffffff
-    comment_text_color: 0xffffffff
-    hilited_candidate_text_color: 0xffffffff
-    hilited_comment_text_color: 0xffffffff
-    hilited_candidate_back_color: 0xff000000
-
-  kuon:
-    name: "琨／Kuon"
-    author: "Patricivs <ipatrickmac@me.com>"
-    text_color: 0xffffffff
-    back_color: 0xff3eb370
-    border_color: 0xff3eb370
-    label_color: 0xffffffff
-    hilited_text_color: 0xff3eb370
-    hilited_back_color: 0xffffffff
-    candidate_text_color: 0xffffffff
-    comment_text_color: 0xffffffff
-    hilited_candidate_text_color: 0xff3eb370
-    hilited_comment_text_color: 0xff3eb370
-    hilited_candidate_back_color: 0xffffffff
-
-  macau:
-    name: "澳門／Macau"
-    author: "Patricivs <ipatrickmac@me.com>"
-    text_color: 0xffffd900
-    back_color: 0xff00a381
-    border_color: 0xff00a381
-    label_color: 0xffffffff
-    hilited_text_color: 0xffffffff
-    hilited_back_color: 0xffffd900
-    candidate_text_color: 0xffffffff
-    comment_text_color: 0xffffffff
-    hilited_candidate_text_color: 0xffffd900
-    hilited_comment_text_color: 0xffffd900
-    hilited_candidate_back_color: 0xffffffff
-
-  nba:
-    name: "NBA"
-    author: "Patricivs <ipatrickmac@me.com>"
-    text_color: 0xffffffff
-    back_color: 0xff006ab7
-    border_color: 0xff006ab7
-    label_color: 0xffffffff
-    hilited_text_color: 0xffd71e54
-    hilited_back_color: 0xffffffff
-    candidate_text_color: 0xffffffff
-    comment_text_color: 0xffffffff
-    hilited_candidate_text_color: 0xffffffff
-    hilited_comment_text_color: 0xffffffff
-    hilited_candidate_back_color: 0xffd71e54
-
-  ps4:
-    name: "遊驛四／PS4"
-    author: "Patricivs <ipatrickmac@me.com>"
-    text_color: 0xffffffff
-    back_color: 0xff000000
-    border_color: 0xff000000
-    label_color: 0xffffffff
-    hilited_text_color: 0xffffffff
-    hilited_back_color: 0xff595757
-    candidate_text_color: 0xffffffff
-    comment_text_color: 0xffffffff
-    hilited_candidate_text_color: 0xffffffff
-    hilited_comment_text_color: 0xffffffff
-    hilited_candidate_back_color: 0xff009fe8
-
-  skype:
-    name: "斯蓋普／Skype"
-    author: "Patricivs <ipatrickmac@me.com>"
-    text_color: 0xffffffff
-    back_color: 0xff00adef
-    border_color: 0xff00adef
-    label_color: 0xffffffff
-    hilited_text_color: 0xff00adef
-    hilited_back_color: 0xffffffff
-    candidate_text_color: 0xffffffff
-    comment_text_color: 0xffffffff
-    hilited_candidate_text_color: 0xff00adef
-    hilited_comment_text_color: 0xff00adef
-    hilited_candidate_back_color: 0xffffffff
-
-  xbox_silver:
-    name: "銀色叉盒／Xbox Silver"
-    author: "Patricivs <ipatrickmac@me.com>"
-    text_color: 0xff8dc21f
-    back_color: 0xffeeeeef
-    border_color: 0xffeeeeef
-    label_color: 0xffb5f05b
-    hilited_text_color: 0xffffffff
-    hilited_back_color: 0xffb5f05b
-    candidate_text_color: 0xff8dc21f
-    comment_text_color: 0xff8dc21f
-    hilited_candidate_text_color: 0xffffffff
-    hilited_comment_text_color: 0xffffffff
-    hilited_candidate_back_color: 0xff288c44
-
-  youtube:
-    name: "YouTube"
-    author: "Patricivs <ipatrickmac@me.com>"
-    text_color: 0xff000000
-    back_color: 0xffdedede
-    border_color: 0xffdedede
-    label_color: 0xff000000
-    hilited_text_color: 0xffc30d23
-    hilited_back_color: 0xffffffff
-    candidate_text_color: 0xff000000
-    comment_text_color: 0xff000000
-    hilited_candidate_text_color: 0xffffffff
-    hilited_comment_text_color: 0xffffffff
-    hilited_candidate_back_color: 0xffc30d23
-
-  so_young:
-    name: "致青春／So Young"
-    author: "五磅兔 <zcunlin@foxmail.com>"
-    text_color: 0xffd33682
-    back_color: 0xfffdf6e3
-    border_color: 0xffeee8d5
-    label_color: 0xff93a1a1
-    candidate_text_color: 0xff657b83
-    comment_text_color: 0xff268bd2
-    hilited_text_color: 0xff839496
-    hilited_back_color: 0xffeee8d5
-    hilited_candidate_text_color: 0xffeee8d5
-    hilited_comment_text_color: 0xffeee8d5
-    hilited_candidate_back_color: 0xff2aa198
-
-  smurfs:
-    name: "藍精靈／Smurfs"
-    author: "skoj <skoj@qq.com>"
-    text_color: 0xffffffff
-    back_color: 0xff1778bf
-    border_color: 0xffe0edf5
-    label_color: 0xff1778bf
-    hilited_text_color: 0xff6dbcdb
-    hilited_back_color: 0xff1778bf
-    candidate_text_color: 0xfff6f6f6
-    comment_text_color: 0xfff6f6f6
-    hilited_candidate_text_color: 0xfff6f6f6
-    hilited_comment_text_color: 0xfff6f6f6
-    hilited_candidate_back_color: 0xff6dbcdb
-
-  wii:
-    name: "Wii"
-    author: "Patricivs <ipatrickmac@me.com>"
-    text_color: 0xff595757
-    back_color: 0xffefefef
-    border_color: 0xffefefef
-    label_color: 0xffc8c9ca
-    hilited_text_color: 0xff33ccff
-    hilited_back_color: 0xffefefef
-    candidate_text_color: 0xff595757
-    comment_text_color: 0xffc8c9ca
-    hilited_candidate_text_color: 0xffffffff
-    hilited_comment_text_color: 0xffffffff
-    hilited_candidate_back_color: 0xff33ccff
-
-  android:
-    name: "安卓／Android"
-    author: "Patricivs <ipatrickmac@me.com>"
-    text_color: 0xffffffff
-    back_color: 0xff1c7399
-    border_color: 0xff1c7399
-    label_color: 0xff3588c1
-    hilited_text_color: 0xffa8c450
-    hilited_back_color: 0xff1c7399
-    candidate_text_color: 0xffffffff
-    comment_text_color: 0xffffffff
-    hilited_candidate_text_color: 0xffffffff
-    hilited_comment_text_color: 0xffffffff
-    hilited_candidate_back_color: 0xffa8c450
-
-  cool_breeze:
-    name: "清風／Cool Breeze"
-    author: "skoj <skoj@qq.com>"
-    text_color: 0xffFF0000
-    back_color: 0xffFBFBFF
-    border_color: 0xffAAAAFF
-    hilited_text_color: 0xffCE0000
-    hilited_back_color: 0xffFBFBFF
-    candidate_text_color: 0xff009100
-    hilited_candidate_text_color: 0xff3A006F
-    hilited_candidate_back_color: 0xffACD6FF
-
-  google_plus:
-    name: "Google+"
-    author: "Patricivs <ipatrickmac@me.com>"
-    text_color: 0xffc8c9ca
-    back_color: 0xffffffff
-    border_color: 0xffdd4b39
-    label_color: 0xffc8c9ca
-    hilited_text_color: 0xffdd4b39
-    hilited_back_color: 0xffffffff
-    candidate_text_color: 0xffdd4b39
-    comment_text_color: 0xffc8c9ca
-    hilited_candidate_text_color: 0xffffffff
-    hilited_comment_text_color: 0xffffffff
-    hilited_candidate_back_color: 0xffdd4b39
-
-  modern_warfare:
-    name: "現代戰爭／Modern Warfare"
-    author: P1461
-    text_color: 0xff70bc14
-    back_color: 0xff0d1b0a
-    border_color: 0xff83ad4b
-    hilited_text_color: 0xfffcfdfb
-    hilited_back_color: 0xff060e03
-    candidate_text_color: 0xffdcfeab
-    comment_text_color: 0xfffbfdfc
-    hilited_candidate_text_color: 0xffdcfeab
-    hilited_candidate_back_color: 0xff636f67
-
-  brisk:
-    name: "輕盈／Brisk"
-    author: "skoj <skoj@qq.com>"
-    text_color: 0xffdc3822
-    back_color: 0xffffffff
-    border_color: 0xff333333
-    hilited_text_color: 0xffdc3822
-    hilited_back_color: 0xffffffff
-    candidate_text_color: 0xff575757
-    hilited_candidate_text_color: 0xffdc3822
-    hilited_candidate_back_color: 0xffffffff
-
-  starcraft_ii:
-    name: "星際爭霸Ⅱ／StarCraft Ⅱ"
-    author: "Patricivs <ipatrickmac@me.com>"
-    text_color: 0xffffffff
-    back_color: 0xff0a1929
-    border_color: 0xff464b53
-    label_color: 0xffffffff
-    hilited_text_color: 0xffffffff
-    hilited_back_color: 0xff0a1017
-    candidate_text_color: 0xffffffff
-    comment_text_color: 0xffffffff
-    hilited_candidate_text_color: 0xffffffff
-    hilited_comment_text_color: 0xffffffff
-    hilited_candidate_back_color: 0xff1eadef
-
-  steam:
-    name: "Steam"
-    author: "Patricivs <ipatrickmac@me.com>"
+    name: 浅色
+    author: Huiyi Keyboard contributors
     light_scheme: default
-    text_color: 0xff528ccd
-    back_color: 0xff171614
-    border_color: 0xff383635
-    label_color: 0xffffffff
-    hilited_text_color: 0xffd1cfc9
-    hilited_back_color: 0xff171614
-    candidate_text_color: 0xffffffff
-    comment_text_color: 0xffa9a7a7
-    hilited_candidate_text_color: 0xffffffff
-    hilited_comment_text_color: 0xffa9a7a7
-    hilited_candidate_back_color: 0xff314259
+    dark_scheme: dark
+    back_color: 0xEDEDED
+    root_background: 0xEDEDED
+    keyboard_back_color: 0xEDEDED
+    candidate_background: 0xEDEDED
+    liquid_keyboard_background: 0xEDEDED
+    border_color: 0xD4D5D8
+    candidate_border_color: 0xD4D5D8
+    candidate_separator_color: 0xEDEDED
+    candidate_text_color: 0x191919
+    comment_text_color: 0x62676B
+    text_color: 0x191919
+    text_back_color: 0xF7F7F7
+    hilited_text_color: 0x067437
+    hilited_back_color: 0xDDECE2
+    hilited_candidate_back_color: 0xDDECE2
+    hilited_candidate_text_color: 0x067437
+    hilited_comment_text_color: 0x067437
+    hilited_candidate_button_color: 0xDDECE2
+    key_back_color: 0xFFFFFF
+    key_text_color: 0x191919
+    key_symbol_color: 0x62676B
+    key_border_color: 0xD4D5D8
+    label_color: 0x191919
+    off_key_back_color: 0xD6D7DA
+    off_key_text_color: 0x191919
+    on_key_back_color: 0xCCEBD7
+    on_key_text_color: 0x164B2A
+    hilited_key_back_color: 0xD6D7DA
+    hilited_key_text_color: 0x191919
+    hilited_key_symbol_color: 0x454A4D
+    preview_back_color: 0xFFFFFF
+    preview_text_color: 0x191919
+    long_text_back_color: 0xFFFFFF
+    long_text_color: 0x191919
+    shadow_color: 0x00000000
+    ai_action_back_color: 0x07C160
+    ai_action_text_color: 0x102318
+    ai_action_symbol_color: 0x00000000
+    bkg: 0xFFFFFF
+    tkg: 0x191919
+    benter: 0x07C160
+    tenter: 0x102318
+    bgn: 0xD6D7DA
+    tgn: 0x191919
+    bbs: 0xD6D7DA
+    tbs: 0x191919
+    baoe: 0xFFFFFF
+    taoe: 0x191919
+    gnb: 0xD6D7DA
+    gnt: 0x191919
+    bh1: 0xFFFFFF
+    th1: 0x191919
+    bh2: 0xFFFFFF
+    th2: 0x191919
+    bh3: 0xFFFFFF
+    th3: 0x191919
+    bh4: 0xFFFFFF
+    th4: 0x191919
 
-  flypy:
-    # description: |
-    #   小鶴飛揚：白底藍字，紅色標明。
-    #   根據小鶴雙拼官網圖片製作
-    #   http://www.flypy.com/images/mr.png
-    name: "小鶴飛揚／flypy"
-    author: "Pal.lxk <Pal.lxk@gmail.com>"
-    text_color: 0xff000000
-    back_color: 0xffffffff
-    border_color: 0xffc6c6c6
-    label_color: 0xff0080ff
-    hilited_text_color: 0xff0080ff
-    hilited_back_color: 0xffffffff
-    candidate_text_color: 0xff0080ff
-    comment_text_color: 0xff0080ff
-    hilited_candidate_text_color: 0xffb00000
-    hilited_comment_text_color: 0xffb00000
-    hilited_candidate_back_color: 0xffffffff
-  tantsing:
-    name: 丹青
-    author: Mijiag
-    back_color: 0xffe3e3e3
-    border_color: 0xff000000
-    text_color: 0xff000000
-    hilited_text_color: 0xffe3e3e3
-    hilited_back_color: 0xff91071a
-    hilited_candidate_text_color: 0xffe3e3e3
-    hilited_candidate_back_color: 0xff730b6f
-    candidate_text_color: 0xff000000
-    comment_text_color: 0xff474747
-  yygc:
-    author: "小辛"
-    back_color: 0xffffffff
-    border_color: 0xffffffff
-    candidate_text_color: 0xff7f7f7f
-    comment_text_color: 0xff7f7f7f
-    hilited_back_color: 0xffffffff
-    hilited_candidate_back_color: 0xffffffff
-    hilited_candidate_text_color: 0xff7f7f7f
-    hilited_comment_text_color: 0xff7f7f7f
-    hilited_key_text_color: 0xff7f7f7f
-    hilited_off_key_back_color: 0xffffffff
-    hilited_off_key_text_color: 0xff7f7f7f
-    hilited_on_key_back_color: 0xffffffff
-    hilited_on_key_text_color: 0xff7f7f7f
-    hilited_text_color: 0xff7f7f7f
-    key_text_color: 0xff7f7f7f
-    label_color: 0xff7f7f7f
-    name: "一葉孤城"
-    off_key_text_color: 0xff7f7f7f
-    text_color: 0xff7f7f7f
-  feng01:
-    author: "风花絮"
-    back_color: 0xffF8EDD1
-    border_color: 0xffF8EDD1
-    candidate_text_color: 0xffA48464
-    comment_text_color: 0xffFFFFFF
-    hilited_back_color: 0xffF4E6C2
-    hilited_candidate_back_color: 0xffF4E6C2
-    hilited_candidate_text_color: 0xffBA6D65
-    hilited_text_color: 0xff969696
-    name: "奈々"
-    off_key_text_color: 0xffBA6D65
-    text_color: 0xffA48464
-  feng02:
-    author: "风花絮"
-    back_color: 0xFF537F92
-    border_color: 0xFF537F92
-    candidate_text_color: 0xffFAFAFF
-    comment_text_color: 0xffFFFFFF
-    hilited_back_color: 0xff537F92
-    hilited_candidate_back_color: 0xff969696
-    hilited_candidate_text_color: 0xffFFFAFA
-    hilited_text_color: 0xff969696
-    name: "独立日"
-    text_color: 0xffFFFAFA
-  feng03:
-    author: "风花絮"
-    back_color: 0xff599852
-    border_color: 0xff599852
-    candidate_text_color: 0xffffffff
-    comment_text_color: 0xff969696
-    hilited_back_color: 0xff599852
-    hilited_candidate_back_color: 0xff599852
-    hilited_candidate_text_color: 0xfff5a54b
-    hilited_text_color: 0xffffffff
-    key_back_color: 0xffffffff
-    name: "一叶清荷"
-    off_key_text_color: 0xfff5a54b
-    text_color: 0xff6aa052
-    key_text_color: 0xff599852 #按键文本
-  feng04:
-    author: "风花絮"
-    back_color: 0xff7896AA
-    border_color: 0xff7896AA
-    candidate_text_color: 0xffFFFFFF
-    comment_text_color: 0xff969696
-    hilited_back_color: 0xff5289A7
-    hilited_candidate_back_color: 0xff7896AA
-    hilited_candidate_text_color: 0xffFFFF80
-    hilited_text_color: 0xff969696
-    key_back_color: 0xff5289A7
-    name: "往事回忆"
-    text_color: 0xffFFFFFF
-  feng05:
-    author: "风花絮"
-    back_color: 0xff000000
-    border_color: 0xff000000
-    candidate_text_color: 0xffFFFFFF
-    comment_text_color: 0xffFFFFFF
-    hilited_back_color: 0xff000000
-    hilited_candidate_back_color: 0xff000000
-    hilited_candidate_text_color: 0xffFEF94D
-    hilited_text_color: 0xffFFFFFF
-    key_back_color: 0xffFEF94D
-    name: "黄黑"
-    text_color: 0xff000000
-    key_text_color: 0xff000000 #按键文本
-    key_symbol_color: 0xff000000 #按键符号
-  feng06:
-    author: "风花絮"
-    back_color: 0xff789c80
-    border_color: 0xff789c80
-    candidate_text_color: 0xffFFFFBC
-    comment_text_color: 0xffFFFFBC
-    hilited_back_color: 0xff789c80
-    hilited_candidate_back_color: 0xff789c80
-    hilited_candidate_text_color: 0xffFE8F23
-    hilited_text_color: 0xffFFFFFF
-    key_back_color: 0xff367272
-    name: "花香流转"
-    text_color: 0xffFFFFFF
-  feng07:
-    author: "风花絮"
-    back_color: 0xffdaa14a
-    border_color: 0xffdaa14a
-    candidate_text_color: 0xffF5E1B4
-    comment_text_color: 0xff828282
-    hilited_back_color: 0xffdaa14a
-    hilited_candidate_back_color: 0xffdaa14a
-    hilited_candidate_text_color: 0xff2E1707
-    hilited_text_color: 0xffFFFFFF
-    key_back_color: 0xff2E1707
-    name: "巴黎遗梦"
-    off_key_text_color: 0xffD89C46
-    text_color: 0xffFFFFFF
-    
-  hong:
-    author: "风花絮"
-    back_color: 0xff353638
-    border_color: 0xff353638
-    candidate_text_color: 0xffffffff
-    hilited_back_color: 0x00141617
-    hilited_candidate_back_color: 0x30594231
-    hilited_candidate_text_color: 0xffffffff
-    hilited_text_color: 0xffc9cfd1
-    key_back_color: 0xff141617
-    label_color: 0xffffffff
-    name: "黑橙／hong"
-    off_key_text_color: 0xffd7d7d7
-    text_color: 0xffcd8c52
-#--------配色结束----------------#
+  dark:
+    name: 深色
+    author: Huiyi Keyboard contributors
+    light_scheme: default
+    dark_scheme: dark
+    back_color: 0x232323
+    root_background: 0x232323
+    keyboard_back_color: 0x232323
+    candidate_background: 0x232323
+    liquid_keyboard_background: 0x232323
+    border_color: 0x48484A
+    candidate_border_color: 0x48484A
+    candidate_separator_color: 0x232323
+    candidate_text_color: 0xF1F1F1
+    comment_text_color: 0xBBBBBF
+    text_color: 0xF1F1F1
+    text_back_color: 0x2B2B2D
+    hilited_text_color: 0x07C160
+    hilited_back_color: 0x303B34
+    hilited_candidate_back_color: 0x303B34
+    hilited_candidate_text_color: 0x64E594
+    hilited_comment_text_color: 0x64E594
+    hilited_candidate_button_color: 0x303B34
+    key_back_color: 0x3B3B3D
+    key_text_color: 0xF1F1F1
+    key_symbol_color: 0xBBBBBF
+    key_border_color: 0x48484A
+    label_color: 0xF1F1F1
+    off_key_back_color: 0x2D2D2F
+    off_key_text_color: 0xF1F1F1
+    on_key_back_color: 0x1D5636
+    on_key_text_color: 0xA7F0C6
+    hilited_key_back_color: 0x565658
+    hilited_key_text_color: 0xFFFFFF
+    hilited_key_symbol_color: 0xE1E1E3
+    preview_back_color: 0x48484A
+    preview_text_color: 0xFFFFFF
+    long_text_back_color: 0x3B3B3D
+    long_text_color: 0xF1F1F1
+    shadow_color: 0x00000000
+    ai_action_back_color: 0x07C160
+    ai_action_text_color: 0x102318
+    ai_action_symbol_color: 0x00000000
+    bkg: 0x3B3B3D
+    tkg: 0xF1F1F1
+    benter: 0x07C160
+    tenter: 0x102318
+    bgn: 0x2D2D2F
+    tgn: 0xF1F1F1
+    bbs: 0x2D2D2F
+    tbs: 0xF1F1F1
+    baoe: 0x3B3B3D
+    taoe: 0xF1F1F1
+    gnb: 0x2D2D2F
+    gnt: 0xF1F1F1
+    bh1: 0x3B3B3D
+    th1: 0xF1F1F1
+    bh2: 0x3B3B3D
+    th2: 0xF1F1F1
+    bh3: 0x3B3B3D
+    th3: 0xF1F1F1
+    bh4: 0x3B3B3D
+    th4: 0xF1F1F1
 
 liquid_keyboard:
   # 目前只能直接写参数，不支持变量或者fallback机制。
@@ -1074,6 +491,39 @@ tool_bar:
 
 #键盘布局
 preset_keyboards:
+  rime_ice_t9:
+    name: 雾凇九宫格
+    ascii_mode: 0
+    reset_ascii_mode: true
+    ascii_keyboard: huiyi_ascii
+    columns: 4
+    width: 25
+    height: 55
+    lock: true
+    keys:
+      - {click: "'", label: 分词}
+      - {click: '2', label: ABC, label_symbol: '2'}
+      - {click: '3', label: DEF, label_symbol: '3'}
+      - {click: BackSpace, key_back_color: off_key_back_color, key_text_color: off_key_text_color}
+      - {click: '4', label: GHI, label_symbol: '4'}
+      - {click: '5', label: JKL, label_symbol: '5'}
+      - {click: '6', label: MNO, label_symbol: '6'}
+      - {click: Keyboard_number, label: '123', key_back_color: off_key_back_color, key_text_color: off_key_text_color}
+      - {click: '7', label: PQRS, label_symbol: '7'}
+      - {click: '8', label: TUV, label_symbol: '8'}
+      - {click: '9', label: WXYZ, label_symbol: '9'}
+      - {click: Return, composing: Return1, hilited_key_back_color: hilited_key_back_color, round_corner: 8, key_symbol_color: key_symbol_color, key_back_color: ai_action_back_color, key_text_color: ai_action_text_color}
+      - {click: Mode_switch, key_back_color: off_key_back_color, key_text_color: off_key_text_color}
+      - {click: Keyboard_symbols, key_back_color: off_key_back_color, key_text_color: off_key_text_color}
+      - {click: space}
+      - {click: ',', long_click: '.'}
+  huiyi_ascii:
+    __include: /preset_keyboards/letter
+    name: 英文全键盘
+    ascii_mode: 1
+    reset_ascii_mode: true
+    lock: false
+    ascii_keyboard: huiyi_ascii
   default:
     author: "暖暖"
     name: 26键默认布局
@@ -1093,7 +543,7 @@ preset_keyboards:
       - {click: p, long_click: 0, key_back_color: bh1, key_text_color: th1}
 
       - {width: 5, key_back_color: bh2, key_text_color: th2}
-      - {click: a, long_click: select_all, key_back_color: bh2, key_text_color: th2}
+      - {click: a, key_back_color: bh2, key_text_color: th2}
       - {click: s, long_click: '@', key_back_color: bh2, key_text_color: th2}
       - {click: d, long_click: '#', key_back_color: bh2, key_text_color: th2}
       - {click: f, long_click: '$', key_back_color: bh2, key_text_color: th2}
@@ -1104,22 +554,22 @@ preset_keyboards:
       - {click: l, long_click: '(){Left}', swipe_down: "=", key_back_color: bh2, key_text_color: th2}
       - {width: 5, key_back_color: bh2, key_text_color: th2}
 
-      - {click: Shift_L, label_symbol: " ", long_click: Shift_L, double_click: Shift_L3, composing: delimiter, width: 15, hilited_key_back_color: benter, key_back_color: bbs, key_text_color: tbs}
+      - {click: Shift_L, label_symbol: " ", double_click: Shift_L3, composing: delimiter, width: 15, hilited_key_back_color: benter, key_back_color: bbs, key_text_color: tbs}
       - {click: z, long_click: '`', swipe_down: '[]{Left}', key_back_color: bh3, key_text_color: th3}
-      - {click: x, long_click: cut, swipe_down: '{}{Left}', key_back_color: bh3, key_text_color: th3}
-      - {click: c, long_click: copy, swipe_down: ' ', key_back_color: bh3, key_text_color: th3}
-      - {click: v, long_click: paste_clip, swipe_down: paste, key_back_color: bh3, key_text_color: th3}
+      - {click: x, swipe_down: '{}{Left}', key_back_color: bh3, key_text_color: th3}
+      - {click: c, swipe_down: ' ', key_back_color: bh3, key_text_color: th3}
+      - {click: v, swipe_down: paste, key_back_color: bh3, key_text_color: th3}
       - {click: b, long_click: ";", swipe_down: "\\", key_back_color: bh3, key_text_color: th3}
       - {click: n, long_click: ":", key_back_color: bh3, key_text_color: th3}
       - {click: m, long_click: '?', swipe_down: "|", key_back_color: bh3, key_text_color: th3}
       - {click: BackSpace2, width: 15, key_back_color: bbs, key_text_color: tbs}
 
-      - {click: Keyboard_number, long_click: Menu, width: 12.5, key_back_color: bgn, key_text_color: tgn}
+      - {click: Keyboard_number, width: 12.5, key_back_color: bgn, key_text_color: tgn}
       - {click: Keyboard_bqrw, label_symbol: "简洁", long_click: "{hide_key_symbol}{hide_key_hint}", swipe_down: Color_switch, swipe_up: Color_switch, width: 12.5, key_text_size: "18", key_back_color: bgn, key_text_color: tgn}
       - {click: ',', label: '，', long_click: '<>{Left}', key_back_color: bh4, key_text_color: th4}
-      - {click: space, long_click: Mode_switch, swipe_left: "Left", swipe_right: "Right", swipe_up: Schema_switchcn, width: 30, key_back_color: bkg, key_text_color: tkg}
-      - {click: '.', label: '。', long_click: clipboard_window, key_back_color: bh4, key_text_color: th4}
-      - {click: '/', long_click: liquid_keyboard_switch , key_text_size: "18", key_back_color: bh4, key_text_color: th4}
+      - {click: space, swipe_left: "Left", swipe_right: "Right", swipe_up: Schema_switchcn, width: 30, key_back_color: bkg, key_text_color: tkg}
+      - {click: '.', label: '。', key_back_color: bh4, key_text_color: th4}
+      - {click: '/' , key_text_size: "18", key_back_color: bh4, key_text_color: th4}
       - {click: Return, label_symbol: "wiki", popup: ["TrimeWiki", "Settings"], composing: Return1, swipe_up: Escape, width: 15, key_back_color: benter, key_text_color: tenter}
 
   letter:
@@ -1142,7 +592,7 @@ preset_keyboards:
       - {click: p, long_click: 0, key_back_color: bh1, key_text_color: th1}
 
       - {width: 5, key_back_color: bh2, key_text_color: th2}
-      - {click: a, long_click: select_all, key_back_color: bh2, key_text_color: th2}
+      - {click: a, key_back_color: bh2, key_text_color: th2}
       - {click: s, long_click: '@', key_back_color: bh2, key_text_color: th2}
       - {click: d, long_click: '#', key_back_color: bh2, key_text_color: th2}
       - {click: f, long_click: '$', key_back_color: bh2, key_text_color: th2}
@@ -1155,20 +605,20 @@ preset_keyboards:
 
       - {click: Shift_L, composing: delimiter, width: 15, hilited_key_back_color: benter, key_back_color: bbs, key_text_color: tbs}
       - {click: z, long_click: '`', swipe_down: '[]{Left}', key_back_color: bh3, key_text_color: th3}
-      - {click: x, long_click: cut, swipe_down: '{}{Left}', key_back_color: bh3, key_text_color: th3}
-      - {click: c, long_click: copy, swipe_down: ' ', key_back_color: bh3, key_text_color: th3}
-      - {click: v, long_click: paste_clip, swipe_down: paste, key_back_color: bh3, key_text_color: th3}
+      - {click: x, swipe_down: '{}{Left}', key_back_color: bh3, key_text_color: th3}
+      - {click: c, swipe_down: ' ', key_back_color: bh3, key_text_color: th3}
+      - {click: v, swipe_down: paste, key_back_color: bh3, key_text_color: th3}
       - {click: b, long_click: ";", swipe_down: "\\", key_back_color: bh3, key_text_color: th3}
       - {click: n, long_click: ":", key_back_color: bh3, key_text_color: th3}
       - {click: m, long_click: '?', swipe_down: "|", key_back_color: bh3, key_text_color: th3}
       - {click: BackSpace, width: 15, key_back_color: bbs, key_text_color: tbs}
 
-      - {click: Keyboard_number, long_click: Menu, width: 12.5, key_back_color: bgn, key_text_color: tgn}
-      - {click: Keyboard_bqrw, long_click: Theme_settings, width: 12.5, key_text_size: "18", key_back_color: bgn, key_text_color: tgn}
+      - {click: Keyboard_number, width: 12.5, key_back_color: bgn, key_text_color: tgn}
+      - {click: Keyboard_bqrw, width: 12.5, key_text_size: "18", key_back_color: bgn, key_text_color: tgn}
       - {click: ',', label: '，', long_click: '<>{Left}', key_back_color: bh4, key_text_color: th4}
-      - {label: '______', click: space, long_click: space_R2, swipe_left: "Left", swipe_right: "Right", swipe_up: Keyboard_fbj, width: 30, key_back_color: bkg, key_text_color: tkg}
-      - {click: '.', label: '。', long_click: Keyboard_kao, key_back_color: bh4, key_text_color: th4}
-      - {click: space_R2, long_click: liquid_keyboard_switch, key_text_size: "18", key_back_color: bh4, key_text_color: th4}
+      - {label: '______', click: space, swipe_left: "Left", swipe_right: "Right", swipe_up: Keyboard_fbj, width: 30, key_back_color: bkg, key_text_color: tkg}
+      - {click: '.', label: '。', key_back_color: bh4, key_text_color: th4}
+      - {click: space_R2, key_text_size: "18", key_back_color: bh4, key_text_color: th4}
       - {click: Return, composing: Return1, swipe_up: Escape, width: 15, key_back_color: benter, key_text_color: tenter}
 
   number:
@@ -1179,33 +629,33 @@ preset_keyboards:
     ascii_mode: 1
     keys:
     
-      - {click: '{}{Left}', long_click: '【】{Left}', key_back_color: bgn, key_text_color: tgn}
-      - {click: '+', long_click: '#', key_back_color: bgn, key_text_color: tgn}
+      - {click: '{}{Left}', key_back_color: bgn, key_text_color: tgn}
+      - {click: '+', key_back_color: bgn, key_text_color: tgn}
       - {click: 1}
       - {click: 2}
       - {click: 3}
       - {click: space1, key_back_color: bgn, key_text_color: tgn}
 
-      - {click: '_', long_click: '[]{Left}', key_back_color: bgn, key_text_color: tgn}
-      - {click: '-', long_click: '%', key_back_color: bgn, key_text_color: tgn}
+      - {click: '_', key_back_color: bgn, key_text_color: tgn}
+      - {click: '-', key_back_color: bgn, key_text_color: tgn}
       - {click: 4}
       - {click: 5}
       - {click: 6}
       - {label: EN, click: Keyboard_defaulten, key_back_color: bgn, key_text_color: tgn}
 
-      - {click: '(){Left}', long_click: '@', key_back_color: bgn, key_text_color: tgn}
-      - {click: '*', long_click: '±', key_back_color: bgn, key_text_color: tgn}
-      - {click: 7, long_click: select_all}
-      - {click: 8, long_click: copy}
-      - {click: 9, long_click: paste_clip, swipe_down: paste}
+      - {click: '(){Left}', key_back_color: bgn, key_text_color: tgn}
+      - {click: '*', key_back_color: bgn, key_text_color: tgn}
+      - {click: 7}
+      - {click: 8}
+      - {click: 9}
       - {click: BackSpace, key_back_color: bbs, key_text_color: tbs}
 
-      - {click: Keyboard_default, long_click: ':', key_back_color: bgn, key_text_color: 'tgn'}
-      - {click: '/', long_click: '\', key_back_color: bgn, key_text_color: tgn}
-      - {click: ., long_click: Keyboard_bqrw, key_back_color: bgn, key_text_color: tgn}
-      - {click: 0, long_click: cut}
-      - {click: '=', long_click: '≠', key_back_color: bgn, key_text_color: tgn}
-      - {click: Return, long_click: Menu, key_back_color: benter, key_text_color: tenter}
+      - {click: Keyboard_default, key_back_color: bgn, key_text_color: 'tgn'}
+      - {click: '/', key_back_color: bgn, key_text_color: tgn}
+      - {click: ., key_back_color: bgn, key_text_color: tgn}
+      - {click: 0}
+      - {click: '=', key_back_color: bgn, key_text_color: tgn}
+      - {click: Return, key_back_color: benter, key_text_color: tenter}
       
   editor:
     ascii_mode: 1
@@ -1233,7 +683,7 @@ preset_keyboards:
       - {click: undo}
       - {click: Tab1}
       - {click: redo}
-      - {click: Return, key_back_color: gnb, key_text_color: gnt, width: 19}
+      - {click: Return, width: 19, key_back_color: ai_action_back_color, key_text_color: ai_action_text_color}
       - {click: Keyboard_default, height: 26.5, width: 17, key_text_size: "14", key_back_color: benter, key_text_color: tenter}
       - {label: '中文', click: Keyboard_bqsy1, width: 16.5, key_text_size: "14", key_back_color: bgn, key_text_color: tgn}
       - {label: '英文', click: Keyboard_bqsy2, width: 16.5, key_text_size: "14", key_back_color: bgn, key_text_color: tgn}
@@ -1260,40 +710,39 @@ preset_keyboards:
       - {label: '#!?', click: Keyboard_bqfh1, width: 10, key_back_color: bgn, key_text_color: tgn}
       - {label: '更多', click: Keyboard_symbols, width: 10, key_text_size: "14", key_back_color: benter, key_text_color: tenter}
 
-      - {click: 符号, long_click: 一, key_text_size: "16"}
-      - {click: 电脑, long_click: 二, key_text_size: "16"}
-      - {click: 天气, long_click: 三, key_text_size: "16"}
-      - {click: 音乐, long_click: 四, key_text_size: "16"}
-      - {click: 单位, long_click: 五, key_text_size: "16"}
-      - {click: 数学, long_click: 分数, key_text_size: "18", symbol_text_size: '8'}
-      - {click: 八卦, long_click: 易经, key_text_size: "18", symbol_text_size: '8'}
+      - {click: 符号, key_text_size: "16"}
+      - {click: 电脑, key_text_size: "16"}
+      - {click: 天气, key_text_size: "16"}
+      - {click: 音乐, key_text_size: "16"}
+      - {click: 单位, key_text_size: "16"}
+      - {click: 数学, key_text_size: "18", symbol_text_size: '8'}
+      - {click: 八卦, key_text_size: "18", symbol_text_size: '8'}
       - {click: space1, width: 16, key_back_color: bgn, key_text_color: tgn}
 
-      - {click: 星号, long_click: 六, key_text_size: "16"}
-      - {click: 方块, long_click: 七, key_text_size: "16"}
-      - {click: 几何, long_click: 八, key_text_size: "16"}
-      - {click: 箭头, long_click: 九, key_text_size: "16"}
-      - {click: 货币, long_click: 十, key_text_size: "16"}
-      - {click: 下标, long_click: 上标, key_text_size: "16", symbol_text_size: '8'}
-      - {click: 天体, long_click: 星座, key_text_size: "16", symbol_text_size: '8'}
-      - {label: '123', click: Keyboard_number, long_click: Schema_switchen, composing: Page_Up, width: 16, key_back_color: bgn, key_text_color: tgn}
+      - {click: 星号, width: 14.28, key_text_size: "16"}
+      - {click: 方块, width: 14.28, key_text_size: "16"}
+      - {click: 几何, width: 14.28, key_text_size: "16"}
+      - {click: 箭头, width: 14.28, key_text_size: "16"}
+      - {click: 货币, width: 14.28, key_text_size: "16"}
+      - {click: 下标, width: 14.28, key_text_size: "16", symbol_text_size: '8'}
+      - {click: 天体, width: 14.32, key_text_size: "16", symbol_text_size: '8'}
       
-      - {click: 标点, long_click: 零, key_text_size: "16"}
-      - {click: 拼音, long_click: 竖标点, key_text_size: "16", symbol_text_size: '8'}
-      - {click: 注音, long_click: 偏旁, key_text_size: "16", symbol_text_size: '8'}
-      - {click: 韩文, long_click: 表情, key_text_size: "16", symbol_text_size: '8'}
-      - {click: 假名, long_click: 片假名, key_text_size: "16", symbol_text_size: '8'}
-      - {click: 麻将, long_click: 骰子, key_text_size: "16", symbol_text_size: '8'}
-      - {click: 象棋, long_click: 扑克, key_text_size: "16", symbol_text_size: '8'}
+      - {click: 标点, key_text_size: "16"}
+      - {click: 拼音, key_text_size: "16", symbol_text_size: '8'}
+      - {click: 注音, key_text_size: "16", symbol_text_size: '8'}
+      - {click: 韩文, key_text_size: "16", symbol_text_size: '8'}
+      - {click: 假名, key_text_size: "16", symbol_text_size: '8'}
+      - {click: 麻将, key_text_size: "16", symbol_text_size: '8'}
+      - {click: 象棋, key_text_size: "16", symbol_text_size: '8'}
       - {click: BackSpace, composing: Escape, width: 16, key_back_color: bbs, key_text_color: tbs}
 
       - {click: Keyboard_default, composing: Page_Down, width: 16, key_back_color: bgn, key_text_color: tgn}
       - {click: '备用', composing: Left, width: 16, key_back_color: bgn, key_text_color: tgn}
-      - {click: 希腊, long_click: 希腊大写, key_text_size: "16", symbol_text_size: '8'}
-      - {click: 罗马, long_click: 罗马大写, key_text_size: "16", symbol_text_size: '8'}
-      - {click: 俄语, long_click: 俄语大写, key_text_size: "16", symbol_text_size: '8'}
+      - {click: 希腊, key_text_size: "16", symbol_text_size: '8'}
+      - {click: 罗马, key_text_size: "16", symbol_text_size: '8'}
+      - {click: 俄语, key_text_size: "16", symbol_text_size: '8'}
       - {click: '备用', composing: Right, width: 16, key_back_color: bgn, key_text_color: tgn}
-      - {click: Return, long_click: Menu, width: 16, key_back_color: benter, key_text_color: tenter}
+      - {click: Return, width: 16, key_back_color: benter, key_text_color: tenter}
 
   bqrw1:
     author: "风花絮"
@@ -3888,36 +3337,36 @@ preset_keyboards:
     - {label: 'Zh', long_click: 1, click: 'z',  width: 15.5, key_back_color: bh1, key_text_color: th1}
     - {label: 'Sh', long_click: 2, click: 's', width: 12.5, key_back_color: bh1, key_text_color: th1}
     - {label: 'Ch', long_click: 3, click: 'c', width: 12, key_back_color: bh1, key_text_color: th1}
-    - {click: Keyboard_a, long_click: Keyboard_a2, composing: 'a', ascii: 'a', swipe_up: IME_last, swipe_right: IME_last, width: 20, key_back_color: baoe, key_text_color: taoe}
-    - {label: 'ZF', click: 'f', long_click: select_all, swipe_up: h, width: 12, key_back_color: bh1, key_text_color: th1}
-    - {label: 'SW', long_click: Menu, click: 'w', swipe_up: '*', width: 12.5, key_back_color: bh1, key_text_color: th1}
-    - {label: 'CM', long_click: DeleteCandidate, click: 'm', swipe_up: 偏旁, swipe_right: 偏旁, swipe_down: Hide, width: 15.5, key_back_color: bh1, key_text_color: th1}
+    - {click: Keyboard_a, composing: 'a', ascii: 'a', swipe_up: IME_last, swipe_right: IME_last, width: 20, key_back_color: baoe, key_text_color: taoe}
+    - {label: 'ZF', click: 'f', swipe_up: h, width: 12, key_back_color: bh1, key_text_color: th1}
+    - {label: 'SW', click: 'w', swipe_up: '*', width: 12.5, key_back_color: bh1, key_text_color: th1}
+    - {label: 'CM', click: 'm', swipe_up: 偏旁, swipe_right: 偏旁, swipe_down: Hide, width: 15.5, key_back_color: bh1, key_text_color: th1}
   #  第二行
     - {label: 'L', long_click: 4, click: 'l', width: 15.5, key_back_color: bh2, key_text_color: th2}
     - {repeatable: true, label: 'D', long_click: 5, click: 'd', width: 11.5, key_back_color: bh2, key_text_color: th2}
     - {label: 'Y', long_click: 6, click: 'y', width: 11.5, key_back_color: bh2, key_text_color: th2}
-    - {click: Keyboard_u, long_click: Keyboard_u2, composing: 'u', ascii: 'u', width: 11.5, key_back_color: baoe, key_text_color: taoe}
-    - {click: Keyboard_i, long_click: Keyboard_i2, composing: 'i', ascii: 'i', width: 11.5, key_back_color: baoe, key_text_color: taoe}
-    - {label: 'NH', long_click: copy, click: 'n', width: 11.5, key_back_color: bh2, key_text_color: th2}
-    - {repeatable: true, label: 'J', long_click: paste, click: 'j', width: 11.5, key_back_color: bh2, key_text_color: th2}
-    - {label: 'TR', click: 't', long_click: Color_switch, swipe_up: CommitComment, width: 15.5, key_back_color: bh2, key_text_color: th2}
+    - {click: Keyboard_u, composing: 'u', ascii: 'u', width: 11.5, key_back_color: baoe, key_text_color: taoe}
+    - {click: Keyboard_i, composing: 'i', ascii: 'i', width: 11.5, key_back_color: baoe, key_text_color: taoe}
+    - {label: 'NH', click: 'n', width: 11.5, key_back_color: bh2, key_text_color: th2}
+    - {repeatable: true, label: 'J', click: 'j', width: 11.5, key_back_color: bh2, key_text_color: th2}
+    - {label: 'TR', click: 't', swipe_up: CommitComment, width: 15.5, key_back_color: bh2, key_text_color: th2}
   #  第三行
     - {label: 'PK', long_click: 7, click: 'p', width: 15.5, key_back_color: bh3, key_text_color: th3}
     - {label: 'Q~', long_click: 8, click: 'q', width: 11.5, key_back_color: bh3, key_text_color: th3}
-    - {click: Keyboard_o, long_click: Keyboard_o2, composing: 'o', ascii: 'o', width: 11.5, key_back_color: baoe, key_text_color: taoe}
+    - {click: Keyboard_o, composing: 'o', ascii: 'o', width: 11.5, key_back_color: baoe, key_text_color: taoe}
     - {label: 'G', click: 'g', long_click: "[]{Left}", width: 11.5, key_back_color: bh3, key_text_color: th3}
     - {label: 'B', click: 'b', long_click: "(){Left}", width: 11.5, key_back_color: bh3, key_text_color: th3}
-    - {click: Keyboard_e, long_click: Keyboard_e2, composing: 'e', ascii: 'e', swipe_up: Schema_switchen, width: 11.5, key_back_color: baoe, key_text_color: taoe}
-    - {label: 'X', click: 'x', long_click: cut, width: 11.5, key_back_color: bh3, key_text_color: th3}
+    - {click: Keyboard_e, composing: 'e', ascii: 'e', swipe_up: Schema_switchen, width: 11.5, key_back_color: baoe, key_text_color: taoe}
+    - {label: 'X', click: 'x', width: 11.5, key_back_color: bh3, key_text_color: th3}
     - {label: "⌫", click: BackSpace, width: 15.5, key_text_size: "25", key_back_color: bbs, key_text_color: tbs}
   #  第四行
-    - {label: "'分词", click: Keyboard_number, long_click: Keyboard_fbjzj, composing: Keyboard_fc, ascii: '.',  swipe_down: Shift_L, width: 15.5, key_back_color: bgn, key_text_color: tgn}
-    - {label: '一', click: Keyboard_bqrw, long_click: Theme_settings, composing: Keyboard_k, ascii: 'k', combo: k, width: 11.5, key_text_size: "18", key_back_color: bgn, key_text_color: tgn}
-    - {label: '✾', click: Keyboard_v2, long_click: VOICE_ASSIST, composing: Keyboard_v, ascii: 'v', width: 11.5, key_back_color: bh4, key_text_color: th4}
-    - {label: '______', click: space1, long_click: space_R, swipe_up: Keyboard_defaulten, width: 23, round_corner: *round1, key_back_color: bkg, key_text_color: tkg}
-    - {label: '丿', click: Keyboard_r2, long_click: Tab, composing: Keyboard_h, ascii: 'h', combo: h, width: 11.5, key_text_size: "19", key_back_color: bh4, key_text_color: th4}
-    - {label: '丶', click: space_R1, long_click: Zcj, composing: Keyboard_r, ascii: 'r', combo: r, width: 11.5, key_text_size: "18", key_back_color: bgn, key_text_color: tgn}
-    - {label: 'Enter', long_click: Return, click: Return, swipe_up: Escape, composing: Keyboard_e0, width: 15.5, round_corner: *round3, key_back_color: benter, key_text_color: tenter}
+    - {label: "'分词", click: Keyboard_number, composing: Keyboard_fc, ascii: '.',  swipe_down: Shift_L, width: 15.5, key_back_color: bgn, key_text_color: tgn}
+    - {label: '一', click: Keyboard_bqrw, composing: Keyboard_k, ascii: 'k', combo: k, width: 11.5, key_text_size: "18", key_back_color: bgn, key_text_color: tgn}
+    - {label: '✾', click: Keyboard_v2, composing: Keyboard_v, ascii: 'v', width: 11.5, key_back_color: bh4, key_text_color: th4}
+    - {label: '______', click: space1, swipe_up: Keyboard_defaulten, width: 23, round_corner: *round1, key_back_color: bkg, key_text_color: tkg}
+    - {label: '丿', click: Keyboard_r2, composing: Keyboard_h, ascii: 'h', combo: h, width: 11.5, key_text_size: "19", key_back_color: bh4, key_text_color: th4}
+    - {label: '丶', click: space_R1, composing: Keyboard_r, ascii: 'r', combo: r, width: 11.5, key_text_size: "18", key_back_color: bgn, key_text_color: tgn}
+    - {label: 'Enter', click: Return, swipe_up: Escape, composing: Keyboard_e0, width: 15.5, round_corner: *round3, key_back_color: benter, key_text_color: tenter}
 
   fbjzj:
     name: 风22并击助记
@@ -3929,36 +3378,36 @@ preset_keyboards:
     - {label: 'Zh', long_click: 1, click: 'z', hint: 'iang uai',  width: 15.5, key_back_color: bh1, key_text_color: th1}
     - {label: 'Sh', long_click: 2, click: 's', hint: 'en', width: 12.5, key_back_color: bh1, key_text_color: th1}
     - {label: 'Ch', long_click: 3, click: 'c', hint: 'eng ie', width: 12, key_back_color: bh1, key_text_color: th1}
-    - {click: Keyboard_a, long_click: Keyboard_a2, composing: 'a', ascii: 'a', hint: 'a ia', swipe_up: IME_last, swipe_right: space_R, width: 20, key_back_color: baoe, key_text_color: taoe}
-    - {label: 'ZF', click: 'f', long_click: select_all, hint: 'er ang', swipe_up: h, width: 12, key_back_color: bh1, key_text_color: th1}
-    - {label: 'SW', long_click: Menu, click: 'w', hint: 'an', swipe_up: '*', width: 12.5, key_back_color: bh1, key_text_color: th1}
-    - {label: 'CM', long_click: DeleteCandidate, click: 'm', hint: 'v uan', swipe_up: 偏旁, swipe_right: 偏旁, swipe_down: Hide, width: 15.5, key_back_color: bh1, key_text_color: th1}
+    - {click: Keyboard_a, composing: 'a', ascii: 'a', hint: 'a ia', swipe_up: IME_last, swipe_right: space_R, width: 20, key_back_color: baoe, key_text_color: taoe}
+    - {label: 'ZF', click: 'f', hint: 'er ang', swipe_up: h, width: 12, key_back_color: bh1, key_text_color: th1}
+    - {label: 'SW', click: 'w', hint: 'an', swipe_up: '*', width: 12.5, key_back_color: bh1, key_text_color: th1}
+    - {label: 'CM', click: 'm', hint: 'v uan', swipe_up: 偏旁, swipe_right: 偏旁, swipe_down: Hide, width: 15.5, key_back_color: bh1, key_text_color: th1}
   #  第二行
     - {label: 'L', long_click: 4, click: 'l', hint: 'ai ue', width: 15.5, key_back_color: bh2, key_text_color: th2}
     - {label: 'D', long_click: 5, click: 'd', hint: 'uo', width: 11.5, key_back_color: bh2, key_text_color: th2}
     - {label: 'Y', long_click: 6, click: 'y', hint: 'in ing', width: 11.5, key_back_color: bh2, key_text_color: th2}
-    - {click: Keyboard_u, long_click: Keyboard_u2, composing: 'u', ascii: 'u', hint: 'u', width: 11.5, key_back_color: baoe, key_text_color: taoe}
-    - {click: Keyboard_i, long_click: Keyboard_i2, composing: 'i', ascii: 'i', hint: 'i', width: 11.5, key_back_color: baoe, key_text_color: taoe}
-    - {label: 'NH', long_click: copy, click: 'n', hint: 'ao', width: 11.5, key_back_color: bh2, key_text_color: th2}
-    - {label: 'J', long_click: paste, click: 'j', hint: 'ou', width: 11.5, key_back_color: bh2, key_text_color: th2}
-    - {label: 'TR', click: 't', long_click: Color_switch, hint: 'ong iong', swipe_up: CommitComment, width: 15.5, key_back_color: bh2, key_text_color: th2}
+    - {click: Keyboard_u, composing: 'u', ascii: 'u', hint: 'u', width: 11.5, key_back_color: baoe, key_text_color: taoe}
+    - {click: Keyboard_i, composing: 'i', ascii: 'i', hint: 'i', width: 11.5, key_back_color: baoe, key_text_color: taoe}
+    - {label: 'NH', click: 'n', hint: 'ao', width: 11.5, key_back_color: bh2, key_text_color: th2}
+    - {label: 'J', click: 'j', hint: 'ou', width: 11.5, key_back_color: bh2, key_text_color: th2}
+    - {label: 'TR', click: 't', hint: 'ong iong', swipe_up: CommitComment, width: 15.5, key_back_color: bh2, key_text_color: th2}
   #  第三行
     - {label: 'PK', long_click: 7, click: 'p', hint: 'ei un', width: 15.5, key_back_color: bh3, key_text_color: th3}
     - {label: 'Q~', long_click: 8, click: 'q', hint: 'ian', width: 11.5, key_back_color: bh3, key_text_color: th3}
-    - {click: Keyboard_o, long_click: Keyboard_o2, composing: 'o', ascii: 'o', hint: 'uang', width: 11.5, key_back_color: baoe, key_text_color: taoe}
+    - {click: Keyboard_o, composing: 'o', ascii: 'o', hint: 'uang', width: 11.5, key_back_color: baoe, key_text_color: taoe}
     - {label: 'G', click: 'g', long_click: "[]{Left}", hint: 'ui', width: 11.5, key_back_color: bh3, key_text_color: th3}
     - {label: 'B', click: 'b', long_click: "(){Left}", hint: 'iu ua', width: 11.5, key_back_color: bh3, key_text_color: th3}
-    - {click: Keyboard_e, long_click: Keyboard_e2, composing: 'e', ascii: 'e', hint: 'e', swipe_up: Schema_switchen, width: 11.5, key_back_color: baoe, key_text_color: taoe}
-    - {label: 'X', click: 'x', long_click: cut, hint: 'iao', width: 11.5, key_back_color: bh3, key_text_color: th3}
+    - {click: Keyboard_e, composing: 'e', ascii: 'e', hint: 'e', swipe_up: Schema_switchen, width: 11.5, key_back_color: baoe, key_text_color: taoe}
+    - {label: 'X', click: 'x', hint: 'iao', width: 11.5, key_back_color: bh3, key_text_color: th3}
     - {label: "⌫", click: BackSpace, width: 15.5, key_text_size: "25", key_back_color: bbs, key_text_color: tbs}
   #  第四行
-    - {label: "'分词", click: Keyboard_number, long_click: Keyboard_fbj, composing: Keyboard_fc, ascii: '.', width: 15.5, key_back_color: bgn, key_text_color: tgn}
-    - {label: '一', click: Keyboard_bqrw, long_click: Theme_settings, composing: Keyboard_k, ascii: 'k', combo: k, width: 11.5, key_text_size: "18", key_back_color: bgn, key_text_color: tgn}
-    - {label: '✾', click: Keyboard_v2, long_click: VOICE_ASSIST, composing: Keyboard_v, ascii: 'v', width: 11.5, key_back_color: bh4, key_text_color: th4}
-    - {label: '______', click: space1, long_click: space_R, swipe_up: Keyboard_defaulten, round_corner: *round1, width: 23, key_back_color: bkg, key_text_color: tkg}
-    - {label: '丿', click: Keyboard_r2, long_click: Tab, composing: Keyboard_h, ascii: 'h', combo: h, width: 11.5, key_back_color: bh4, key_text_color: th4}
-    - {label: '丶', click: space_R1, long_click: Zcj, composing: Keyboard_r, ascii: 'r', combo: r, width: 11.5, key_text_size: "18", key_back_color: bgn, key_text_color: tgn}
-    - {label: 'Enter', long_click: Return, click: Return, swipe_up: Escape, composing: Keyboard_e0, width: 15.5, round_corner: *round3, key_back_color: benter, key_text_color: tenter}
+    - {label: "'分词", click: Keyboard_number, composing: Keyboard_fc, ascii: '.', width: 15.5, key_back_color: bgn, key_text_color: tgn}
+    - {label: '一', click: Keyboard_bqrw, composing: Keyboard_k, ascii: 'k', combo: k, width: 11.5, key_text_size: "18", key_back_color: bgn, key_text_color: tgn}
+    - {label: '✾', click: Keyboard_v2, composing: Keyboard_v, ascii: 'v', width: 11.5, key_back_color: bh4, key_text_color: th4}
+    - {label: '______', click: space1, swipe_up: Keyboard_defaulten, round_corner: *round1, width: 23, key_back_color: bkg, key_text_color: tkg}
+    - {label: '丿', click: Keyboard_r2, composing: Keyboard_h, ascii: 'h', combo: h, width: 11.5, key_back_color: bh4, key_text_color: th4}
+    - {label: '丶', click: space_R1, composing: Keyboard_r, ascii: 'r', combo: r, width: 11.5, key_text_size: "18", key_back_color: bgn, key_text_color: tgn}
+    - {label: 'Enter', click: Return, swipe_up: Escape, composing: Keyboard_e0, width: 15.5, round_corner: *round3, key_back_color: benter, key_text_color: tenter}
 
 
 preset_keys:
@@ -3982,7 +3431,7 @@ preset_keys:
   Shift_L: {label: Shift, preview: '⇪', functional: false, send: Shift_L}
   Shift_L3: {label: Shift, preview: '⇪', functional: false, send: Shift_L, shift_lock: click}
   Return: { label: enter_labels, preview: '↩', functional: false, send: Return }
-  Return1: {label: Enter, preview: '↩', functional: false, send: Return}
+  Return1: {label: 确认, preview: '↩', functional: false, send: Return}
   Return2: {label: 回车, send: Return }
   Hide: {label: 隐藏, send: BACK}
   BackSpace: {label: 退格, preview: '⇦', repeatable: true, functional: false, send: BackSpace}
@@ -4006,10 +3455,10 @@ preset_keys:
   copy: {label: 复制, functional: false, send: Control+c}
   paste: {label: 粘贴, functional: false, send: Control+v}
   paste_clip: {label: 粘贴, send: FUNCTION, command: clipboard}
-  paste_text: {label: 貼上文本, send: Control+Shift+Alt+v} #>=Android 6.0
+  paste_text: {label: 粘贴文本, send: Control+Shift+Alt+v} #>=Android 6.0
   share_text: {label: 分享文本, send: Control+Alt+s} #>=Android 6.0
   redo: {label: 重做, functional: false, send: Control+Shift+z} #>=Android 6.0
-  undo: {label: 撤銷, functional: false, send: Control+z} #>=Android 6.0
+  undo: {label: 撤销, functional: false, send: Control+z} #>=Android 6.0
   delimiter: {label: 分词, text: ''''}
   x1: {text: '{Home}{Right}{Right}', label: 单字, functional: false}
   x2: {text: '{Home}{Right}{Right}{Right}{Right}', label: 二字, functional: false}
@@ -4033,7 +3482,7 @@ preset_keys:
   Keyboard_move: { label: ❖, functional: true, send: Eisu_toggle, select: move }
   Keyboard_next: { label: 后退, functional: false, send: Eisu_toggle, select: .next }
   Keyboard_last: { label: 后退, functional: false, send: Eisu_toggle, select: .last }
-  Keyboard_last_lock: { label: 返回, send: Eisu_toggle, select: .last_lock } #直接切換到下一键盘
+  Keyboard_last_lock: { label: 返回, send: Eisu_toggle, select: .last_lock } #直接切换到下一键盘
   liquid_keyboard_exit: {label: 返回, send: FUNCTION, command: liquid_keyboard, option: "-1"}  #退出liquidkeyboard
   liquid_keyboard_switch: { label: 更多, send: FUNCTION, command: liquid_keyboard, option: "特殊" }
   liquid_keyboard_tabs: { label: 更多, send: FUNCTION, command: liquid_keyboard, option: "更多" }
@@ -4041,15 +3490,15 @@ preset_keys:
   menu_keyboard: { label: 菜单, send: FUNCTION, command: menu_keyboard }
   clipboard_window: { label: "剪贴", send: FUNCTION, command: "clipboard_window", option: '0' } #0剪贴板，1收藏夹
   # rime状态
-  Mode_switch: {toggle: ascii_mode, functional: false, send: SWITCH_CHARSET, states: [ 中文, 西文 ]}
+  Mode_switch: {toggle: ascii_mode, functional: false, send: SWITCH_CHARSET, states: [ 中文, 英文 ]}
   Zenkaku_Hankaku: {toggle: full_shape, send: SWITCH_CHARSET, states: [ 半角, 全角 ]}
-  Henkan: {toggle: simplification, send: SWITCH_CHARSET, states: [ 漢字, 汉字 ]}
+  Henkan: {toggle: simplification, send: SWITCH_CHARSET, states: [ 繁体, 简体 ]}
   Charset_switch: {toggle: extended_charset, send: SWITCH_CHARSET, states: [ 常用, 增广 ]}
   Punct_switch: {toggle: ascii_punct, send: SWITCH_CHARSET, states: [ 。，, ．， ]}
   # trime设置
-  IME_switch: {label: 🌐, send: LANGUAGE_SWITCH} #彈出對話框選擇輸入法
-  IME_last: {label: 上一输入法, send: LANGUAGE_SWITCH, select: .last} #直接切換到上一輸入法
-  IME_next: {label: 下一输入法, send: LANGUAGE_SWITCH, select: .next} #直接切換到下一輸入法
+  IME_switch: {label: 🌐, send: LANGUAGE_SWITCH} #弹出对话框选择输入法
+  IME_last: {label: 上一输入法, send: LANGUAGE_SWITCH, select: .last} #直接切换到上一输入法
+  IME_next: {label: 下一输入法, send: LANGUAGE_SWITCH, select: .next} #直接切换到下一输入法
   Schema_switch: {label: 下一方案, functional: false, send: Control+Shift+1}
   Schema_Eng: {label: En, functional: true, send: Control+Shift+0}
   Theme_settings: {label: 主题, send: SETTINGS, option: "theme"}
@@ -4062,18 +3511,18 @@ preset_keys:
   hide_key_hint: {label: 隐藏注解, send: FUNCTION, command: switch_hide_key_hint}
   # trime命令
   Date: {label: 日期, send: FUNCTION, command: date, option: " yyyy-MM-dd "}
-  Time: {label: 時間, send: FUNCTION, command: date, option: "HH:mm:ss"} #時間： date 格式
-  TrimeApp: {label: 同文, send: FUNCTION, command: run, option: "com.osfans.trime"} #運行程序: run 包名
-  TrimeCmp: {label: 同文組件, send: FUNCTION, command: run, option: "com.osfans.trime/.ui.main.MainActivity"} #運行程序指定組件: run 包名/組件名
-  Homepage: {label: 同文主頁, send: FUNCTION, command: run, option: "https://github.com/osfans/trime"} #查看網頁: run 網址
-  TrimeWiki: {label: Wiki, send: FUNCTION, command: run, option: "https://github.com/osfans/trime/wiki/trime.yaml-詳解"}
-  Wiki: {label: 維基, send: FUNCTION, command: run, option: "https://zh.wikipedia.org/wiki/%s"} #搜索網頁: %s或者%1$s爲當前字符
-  Google: {label: 谷歌, send: FUNCTION, command: run, option: "https://www.google.com/search?q=%s"} #搜索網頁: %s或者%1$s爲當前字符
-  MoeDict: {label: 萌典, send: FUNCTION, command: run, option: "https://www.moedict.tw/%3$s"} #搜索網頁: %3$s爲光標前字符
-  Baidu: {label: 百度搜索, send: FUNCTION, command: run, option: "https://www.baidu.com/s?wd=%4$s"} #搜索網頁: %4s爲光標前所有字符
-  Zdic: {label: 漢典, send: FUNCTION, command: run, option: "http://www.zdic.net/sousuo/?q=%1$s"} #搜索網頁: %s或者%1$s爲當前字符
-  Zdic2: {label: 漢典, send: FUNCTION, command: run, option: "http://www.zdic.net/sousuo/?q=%2$s"} #搜索網頁: %2$s爲當前輸入的編碼
-  WebSearch: {label: 搜索網頁, send: FUNCTION, command: web_search, option: "%4$s"} #搜索，其他view、dial、edit、search等intent，參考安卓的intent文檔：https://developer.android.com/reference/android/content/Intent.html
+  Time: {label: 时间, send: FUNCTION, command: date, option: "HH:mm:ss"} #时间： date 格式
+  TrimeApp: {label: 同文, send: FUNCTION, command: run, option: "com.osfans.trime"} #运行程序: run 包名
+  TrimeCmp: {label: 同文组件, send: FUNCTION, command: run, option: "com.osfans.trime/.ui.main.MainActivity"} #运行程序指定组件: run 包名/组件名
+  Homepage: {label: 同文主页, send: FUNCTION, command: run, option: "https://github.com/osfans/trime"} #查看网页: run 网址
+  TrimeWiki: {label: Wiki, send: FUNCTION, command: run, option: "https://github.com/osfans/trime/wiki/trime.yaml-详解"}
+  Wiki: {label: 维基, send: FUNCTION, command: run, option: "https://zh.wikipedia.org/wiki/%s"} #搜索网页: %s或者%1$s为当前字符
+  Google: {label: 谷歌, send: FUNCTION, command: run, option: "https://www.google.com/search?q=%s"} #搜索网页: %s或者%1$s为当前字符
+  MoeDict: {label: 萌典, send: FUNCTION, command: run, option: "https://www.moedict.tw/%3$s"} #搜索网页: %3$s为光标前字符
+  Baidu: {label: 百度搜索, send: FUNCTION, command: run, option: "https://www.baidu.com/s?wd=%4$s"} #搜索网页: %4s为光标前所有字符
+  Zdic: {label: 汉典, send: FUNCTION, command: run, option: "http://www.zdic.net/sousuo/?q=%1$s"} #搜索网页: %s或者%1$s为当前字符
+  Zdic2: {label: 汉典, send: FUNCTION, command: run, option: "http://www.zdic.net/sousuo/?q=%2$s"} #搜索网页: %2$s为当前输入的编码
+  WebSearch: {label: 搜索网页, send: FUNCTION, command: web_search, option: "%4$s"} #搜索，其他view、dial、edit、search等intent，参考安卓的intent文档：https://developer.android.com/reference/android/content/Intent.html
   
   Left1: {label: '⇦', send: Control+Left, repeatable: true, functional: false}
   Right1: {label: '⇨', send: Control+Right, repeatable: true, functional: false}
@@ -4081,7 +3530,7 @@ preset_keys:
 
   # 22自定义功能键
   Keyboard_fbjzj: {label: 助记, functional: false, send: Eisu_toggle, select: fbjzj}
-  Keyboard_fbj: {label: 風, functional: false, send: Eisu_toggle, select: fbj}
+  Keyboard_fbj: {label: 风, functional: false, send: Eisu_toggle, select: fbj}
   Keyboard_defaulten: {label: EN, functional: false, send: Eisu_toggle, select: letter}
   Schema_switchen1: {label: EN, send: Control+Shift+5, functional: true}
   Schema_switchen: {label: EN, send: Control+Shift+5, functional: false}
@@ -4180,7 +3629,7 @@ preset_keys:
   Zcj: {label: 单字, functional: false, text: "{Home}{Right}{Right}"}
   Tab: {label: 字词, send: Tab}
   Tab1: {label: Tab, functional: false, send: Tab}
-  space_R: {label: "風二十二键", functional: false, send: Eisu_toggle, select: letter}
+  space_R: {label: "风二十二键", functional: false, send: Eisu_toggle, select: letter}
   space_R1: {label: "EN", functional: false, send: Eisu_toggle, select: letter}
   space_R2: {label: "中", functional: false, send: Eisu_toggle, select: fbj}
   #符号

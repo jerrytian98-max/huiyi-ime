@@ -4,6 +4,8 @@
  */
 @file:Suppress("UnstableApiUsage")
 
+import java.util.Properties
+
 plugins {
     id("com.osfans.trime.app-convention")
     id("com.osfans.trime.native-app-convention")
@@ -16,17 +18,42 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+// Local, ignored build input contains an AES-GCM envelope, never a plaintext
+// API key. The wrapping material necessarily ships in an internal-test APK;
+// this is obfuscation at distribution time, not a substitute for a backend.
+val bundledAiDefaults = Properties().apply {
+    rootProject.file("local-ai-defaults.properties").takeIf { it.isFile }?.inputStream()?.use { load(it) }
+}
+fun bundledAiField(name: String): String = bundledAiDefaults.getProperty(name, "").also {
+    require(it.matches(Regex("[A-Za-z0-9+/=]*"))) { "Invalid bundled AI build input" }
+}
+
+val bundledSpeechDefaults = Properties().apply {
+    rootProject.file("local-tencent-asr-defaults.properties").takeIf { it.isFile }?.inputStream()?.use { load(it) }
+}
+fun bundledSpeechField(name: String): String = bundledSpeechDefaults.getProperty(name, "").also {
+    require(it.matches(Regex("[A-Za-z0-9+/=]*"))) { "Invalid bundled speech build input" }
+}
+
 android {
     namespace = "com.osfans.trime"
     compileSdk = 37
     buildToolsVersion = "37.0.0"
 
     defaultConfig {
-        applicationId = "com.osfans.trime"
-        minSdk = 21
+        applicationId = "com.rimeai.keyboard"
+        minSdk = 26
+        testInstrumentationRunner = "com.osfans.trime.ai.AiIntegrationInstrumentation"
         targetSdk = 37
-        versionCode = 20270101
-        versionName = "3.3.14"
+        versionCode = 20270141
+        versionName = "0.1.40-ai"
+        buildConfigField("String", "AI_DEFAULT_CIPHERTEXT", "\"${bundledAiField("ciphertext")}\"")
+        buildConfigField("String", "AI_DEFAULT_WRAP_KEY", "\"${bundledAiField("wrap_key")}\"")
+        buildConfigField("String", "AI_DEFAULT_BUNDLE_ID", "\"${bundledAiField("id")}\"")
+
+        buildConfigField("String", "SPEECH_DEFAULT_CIPHERTEXT", "\"${bundledSpeechField("ciphertext")}\"")
+        buildConfigField("String", "SPEECH_DEFAULT_WRAP_KEY", "\"${bundledSpeechField("wrap_key")}\"")
+        buildConfigField("String", "SPEECH_DEFAULT_BUNDLE_ID", "\"${bundledSpeechField("id")}\"")
 
         multiDexEnabled = true
         buildConfigField("String", "BUILDER", "\"${project.builder}\"")

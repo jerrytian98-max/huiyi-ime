@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="pinyin_keyboard_layout">Chinese keyboard layout</string>
+    <string name="pinyin_layout_qwerty">Full keyboard (26 keys)</string>
+    <string name="pinyin_layout_t9">Pinyin keypad (9 keys)</string>
+    <string name="pinyin_layout_hint">Both layouts use Rime Ice. English and password fields use the full keyboard.</string>
+    <string name="pinyin_layout_switch_failed">Could not switch keyboard layout. Please try again.</string>
+</resources>

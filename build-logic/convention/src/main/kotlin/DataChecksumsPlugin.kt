@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+import com.android.build.api.dsl.ApplicationExtension
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import org.gradle.api.DefaultTask
@@ -15,7 +16,9 @@ import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
+import org.gradle.api.tasks.Sync
 import org.gradle.api.tasks.TaskAction
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.task
 import org.gradle.work.ChangeType
@@ -35,12 +38,37 @@ class DataChecksumsPlugin : Plugin<Project> {
         const val TASK = "generateDataChecksums"
         const val CLEAN_TASK = "cleanDatacheksums"
         const val FILE_NAME = "checksums.json"
+        const val PREPARE_TASK = "prepareRimeAssets"
     }
 
     override fun apply(target: Project) {
+        // Git on Windows may check out symlinks as small text files. Resolve them
+        // into a build directory so dictionaries, rather than link paths, enter the APK.
+        val packagedAssets = target.layout.buildDirectory.dir("generated/rimeAssets")
+        val prepare = target.tasks.register<Sync>(PREPARE_TASK) {
+            from(target.assetsDir) { exclude(FILE_NAME) }
+            into(packagedAssets)
+            inputs.dir(target.file("data/rime"))
+            doLast {
+                target.assetsDir.resolve("shared").listFiles()?.forEach { source ->
+                    if (source.isFile && source.length() < 256) {
+                        val text = source.readText().trim()
+                        if (text.startsWith("../../../../data/rime/")) {
+                            val linked = source.parentFile.resolve(text).canonicalFile
+                            check(linked.isFile) { "Missing Rime dictionary: $linked; initialize submodules" }
+                            linked.copyTo(packagedAssets.get().file("shared/${source.name}").asFile, overwrite = true)
+                        }
+                    }
+                }
+            }
+        }
+        target.extensions.configure<ApplicationExtension> {
+            sourceSets.getByName("main").assets.setSrcDirs(listOf(packagedAssets))
+        }
         target.tasks.register<DataChecksumsTask>(TASK) {
-            inputDir.set(target.assetsDir)
-            outputFile.set(target.assetsDir.resolve(FILE_NAME))
+            dependsOn(prepare)
+            inputDir.set(packagedAssets)
+            outputFile.set(packagedAssets.map { it.file(FILE_NAME) })
         }
         target.tasks.register<Delete>(CLEAN_TASK) {
             delete(target.assetsDir.resolve(FILE_NAME))

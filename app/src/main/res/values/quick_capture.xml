@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <bool name="supports_quick_capture">false</bool>
+    <string name="ai_quick_capture_name">Huiyi quick screenshot</string>
+    <string name="ai_quick_capture_description">Tap to capture the current screen. Flick the keyboard screenshot button upward and release to automatically swipe downward through earlier messages and capture up to five screens. The app queries foreground bounds and injects bounded touch swipes only for this action; tap Stop to cancel. It does not read node text or capture in the background. Images are sent to your configured AI provider. Enable only if you agree; disable in Accessibility settings.</string>
+</resources>

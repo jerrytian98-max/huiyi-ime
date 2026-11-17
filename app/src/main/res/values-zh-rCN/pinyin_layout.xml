@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="pinyin_keyboard_layout">中文键盘布局</string>
+    <string name="pinyin_layout_qwerty">全键盘（26键）</string>
+    <string name="pinyin_layout_t9">九宫格（9键）</string>
+    <string name="pinyin_layout_hint">两种布局均使用雾凇拼音；英文和密码输入使用全键盘。</string>
+    <string name="pinyin_layout_switch_failed">键盘布局切换失败，请重试。</string>
+</resources>

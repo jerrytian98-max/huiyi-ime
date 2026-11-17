@@ -43,7 +43,7 @@ class OpenCCDataPlugin : Plugin<Project> {
                 outputDir.set(project.dataInstallDir)
             }
         // make sure OpenCC data have been installed before generating data checksums
-        project.tasks.getByName(DataChecksumsPlugin.TASK).dependsOn(task)
+        project.tasks.getByName(DataChecksumsPlugin.PREPARE_TASK).dependsOn(task)
     }
 
     private fun registerCleanTask(project: Project) {

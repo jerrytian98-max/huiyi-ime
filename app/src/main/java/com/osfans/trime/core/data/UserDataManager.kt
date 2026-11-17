@@ -39,15 +39,6 @@ object UserDataManager {
 
     private const val HASH_BUFFER_SIZE = 32 * 1024
 
-    private const val DEFAULT_CUSTOM_FILE_NAME = "default.custom.yaml"
-
-    private const val SCHEMA_LIST_CUSTOM_PATCH = """
-      patch:
-        schema_list:
-          - schema: luna_pinyin
-          - schema: luna_pinyin_simp
-    """
-
     private val lock = Mutex()
 
     private val json by lazy { Json }
@@ -130,11 +121,10 @@ object UserDataManager {
      * Bootstraps a usable schema list into the user data dir on first run, so a
      * freshly installed app has something to deploy.
      */
-    fun ensureDefaultCustomConfig() {
-        val custom = File(userDataDir, DEFAULT_CUSTOM_FILE_NAME)
-        if (!custom.exists() && custom.createNewFile()) {
-            custom.writeText(SCHEMA_LIST_CUSTOM_PATCH.trimIndent())
-        }
+    fun ensureDefaultCustomConfig(): Boolean {
+        val defaultsChanged = RimeIceDefaults.ensure(userDataDir)
+        val t9Added = RimeIceDefaults.ensureT9(userDataDir)
+        return defaultsChanged || t9Added
     }
 
     /**

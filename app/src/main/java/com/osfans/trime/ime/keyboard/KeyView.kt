@@ -14,8 +14,10 @@ import android.graphics.PorterDuffColorFilter
 import android.graphics.Rect
 import android.graphics.drawable.GradientDrawable
 import android.view.KeyEvent
+import androidx.core.content.ContextCompat
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.utils.sizeDp
+import com.osfans.trime.R
 import com.osfans.trime.data.theme.Theme
 import com.osfans.trime.ime.core.TrimeInputMethodService
 import com.osfans.trime.ime.popup.PopupAction
@@ -40,6 +42,18 @@ class KeyView(
     private val popup: PopupDelegate
         get() = keyboardView.popup
 
+    private val voiceSpace = key.getCode(KeyBehavior.CLICK) == KeyEvent.KEYCODE_SPACE
+    private var spaceVoiceGesture = false
+    private var spaceVoiceToken: Long? = null
+    private var spaceVoiceLabel: String? = null
+
+    private fun setSpaceVoiceStatus(text: String?) {
+        spaceVoiceLabel = text
+        if (text == null) spaceVoiceToken = null
+        contentDescription = text?.let { "空格语音 · $it" } ?: "空格，长按语音输入"
+        invalidate()
+    }
+
     private val deletedTextBuffer = ArrayDeque<String>()
 
     private var keyPressed = false
@@ -54,6 +68,7 @@ class KeyView(
 
     private var cachedIcon: IconicsDrawable? = null
     private var cachedIconName: String? = null
+    private val spaceMicrophone by lazy { ContextCompat.getDrawable(context, R.drawable.ic_ai_mic)?.mutate() }
 
     private val cachedLocation = intArrayOf(0, 0)
     private val cachedBounds = Rect()
@@ -72,22 +87,36 @@ class KeyView(
 
     init {
         setWillNotDraw(false)
-        isRepeatable = key.click?.isRepeatable ?: false
+        isRepeatable = !voiceSpace && (key.click?.isRepeatable ?: false)
         isSlideCursor = key.click?.isSlideCursor ?: false
         isSlideDelete = key.click?.isSlideDelete ?: false
-        hasLongPress = key.hasAction(KeyBehavior.LONG_CLICK)
+        hasLongPress = voiceSpace || key.hasAction(KeyBehavior.LONG_CLICK)
         hasDouble = key.hasAction(KeyBehavior.DOUBLE_CLICK)
         hasLazyDouble = key.hasAction(KeyBehavior.LAZY_DOUBLE_CLICK)
-        hasPopup = key.popup.isNotEmpty()
+        hasPopup = !voiceSpace && key.popup.isNotEmpty()
 
+        if (voiceSpace) contentDescription = "空格，长按语音输入"
         onPress = {
+            service.aiInputController.cancelLongScreenAnalysis()
+            service.aiInputController.cancelHeldVoice()
+            spaceVoiceGesture = false
+            spaceVoiceToken = null
             if (keyboard.firstPressedKeyIndex == -1) keyboard.firstPressedKeyIndex = id
             setPressedState(true)
             key.getCode(KeyBehavior.CLICK).let { keyboardActionListener.onPress(it) }
             showPopupPreview()
         }
 
-        onRelease = { behavior, isFromLongPress ->
+        onRelease = release@{ behavior, isFromLongPress ->
+            if (spaceVoiceGesture) {
+                val token = spaceVoiceToken
+                spaceVoiceGesture = false
+                if (token != null) service.aiInputController.finishHeldVoice(token) else setSpaceVoiceStatus(null)
+                setPressedState(false)
+                dismissPopupPreview()
+                if (keyboard.firstPressedKeyIndex == id) keyboard.firstPressedKeyIndex = -1
+                return@release
+            }
             Timber.d("KeyView release: label=${key.getLabel()}, behavior=$behavior, fromLongPress=$isFromLongPress")
             if (isFromLongPress) {
                 if (hasPopup) {
@@ -155,7 +184,15 @@ class KeyView(
         }
 
         onLongClick = {
-            if (key.popup.isNotEmpty()) {
+            if (voiceSpace) {
+                // Accessibility long-clicks have no matching finger-up event.
+                if (isPressed) {
+                    spaceVoiceGesture = true
+                    InputFeedbackManager.stopSpeechFeedback()
+                    dismissPopupPreview()
+                    spaceVoiceToken = service.aiInputController.startHeldVoice(::setSpaceVoiceStatus)
+                }
+            } else if (key.popup.isNotEmpty()) {
                 dismissPopupPreview()
                 showPopupKeyboard()
             } else if (hasLongPress) {
@@ -168,16 +205,32 @@ class KeyView(
         }
 
         onMove = { x, y, isLongPress ->
+            val token = spaceVoiceToken
+            if (spaceVoiceGesture && token != null && (x < -dp(32) || x > width + dp(32) || y < -dp(32) || y > height + dp(32))) {
+                service.aiInputController.cancelHeldVoice(token)
+                spaceVoiceToken = null
+                setSpaceVoiceStatus("已取消")
+            }
             if (isLongPress && hasPopup) {
                 popup.listener.onPopupAction(PopupAction.ChangeFocusAction(id, x, y))
             }
         }
 
         onCancel = {
+            spaceVoiceToken?.let { service.aiInputController.cancelHeldVoice(it) }
+            spaceVoiceToken = null
+            spaceVoiceGesture = false
+            if (voiceSpace) setSpaceVoiceStatus(null)
+            if (keyboard.firstPressedKeyIndex == id) keyboard.firstPressedKeyIndex = -1
             deletedTextBuffer.clear()
             setPressedState(false)
             dismissPopupPreview()
         }
+    }
+
+    override fun onDetachedFromWindow() {
+        cancelGesture()
+        super.onDetachedFromWindow()
     }
 
     fun setPressedState(pressed: Boolean) {
@@ -271,11 +324,11 @@ class KeyView(
 
         drawBackground(canvas, key)
 
-        val label = key.getLabel().let {
+        val label = (spaceVoiceLabel ?: key.getLabel()).let {
             if (it == "enter_labels") keyboardView.labelEnter else it
         }
 
-        if (label.isNotEmpty()) {
+        if (label.isNotEmpty() || voiceSpace) {
             drawLabel(canvas, label)
         }
 
@@ -321,12 +374,31 @@ class KeyView(
                 clearShadowLayer()
             }
 
+            val micSize = if (voiceSpace) dp(16) else 0
+            val micGap = if (voiceSpace && label.isNotEmpty()) dp(5) else 0
+            if (voiceSpace) {
+                val availableWidth = (width - paddingLeft - paddingRight - dp(12) - micSize - micGap).coerceAtLeast(1).toFloat()
+                val measuredWidth = textPaint.measureText(label)
+                if (measuredWidth > availableWidth) textPaint.textSize *= availableWidth / measuredWidth
+            }
+
             val centerX = (width - paddingLeft - paddingRight) / 2f + paddingLeft
             val centerY = (height - paddingTop - paddingBottom) / 2f + paddingTop
             val fontMetrics = textPaint.fontMetrics
             val adjustmentY = -(fontMetrics.ascent + fontMetrics.descent) / 2f
 
-            canvas.drawText(label, centerX + sp(key.keyTextOffsetX), centerY + adjustmentY + sp(key.keyTextOffsetY), textPaint)
+            val groupX = centerX + sp(key.keyTextOffsetX)
+            val groupY = centerY + sp(key.keyTextOffsetY)
+            if (voiceSpace) {
+                val textWidth = textPaint.measureText(label)
+                val left = groupX - (micSize + micGap + textWidth) / 2f
+                spaceMicrophone?.apply {
+                    setTint(textColor)
+                    setBounds(left.toInt(), (groupY - micSize / 2f).toInt(), (left + micSize).toInt(), (groupY + micSize / 2f).toInt())
+                    draw(canvas)
+                }
+            }
+            canvas.drawText(label, groupX + (micSize + micGap) / 2f, groupY + adjustmentY, textPaint)
         }
     }
 

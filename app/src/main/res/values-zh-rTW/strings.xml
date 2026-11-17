@@ -7,8 +7,39 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- 輸入法平臺名稱  -->
-    <string name="app_name_release">同文輸入法</string>
-    <string name="app_name_debug">同文輸入法（除錯模式）</string>
+    <string name="app_name_release">會意輸入法</string>
+    <string name="app_name_debug">會意輸入法（內測）</string>
+    <string name="ai_settings">會意 AI 設定</string>
+    <string name="ai_settings_entry">AI 設定</string>
+    <string name="settings_group_input">輸入</string>
+    <string name="settings_group_ai">AI 功能</string>
+    <string name="settings_group_appearance_tools">外觀與工具</string>
+    <string name="settings_group_app_data">應用與資料</string>
+    <string name="settings_summary_keyboard">拼音配置、按鍵操作與回饋</string>
+    <string name="settings_summary_schemata">選擇啟用的輸入方案</string>
+    <string name="settings_summary_candidates">浮動候選詞視窗</string>
+    <string name="settings_summary_dictionary">管理個人詞語</string>
+    <string name="settings_summary_ai">回覆、擷圖、語音與模型</string>
+    <string name="settings_summary_theme">主題與深淺配色</string>
+    <string name="settings_summary_clipboard">歷史記錄與貼上提示</string>
+    <string name="settings_summary_general">文字顯示與輸入偏好</string>
+    <string name="settings_summary_profile">儲存、同步與重設</string>
+    <string name="settings_summary_advanced">應用程式顯示與系統相容</string>
+    <string name="settings_general_text">文字顯示</string>
+    <string name="settings_general_voice">系統語音輸入</string>
+    <string name="settings_keyboard_layout">配置與按鍵</string>
+    <string name="settings_keyboard_feedback">聲音與震動</string>
+    <string name="settings_keyboard_gestures">手勢與按鍵時長</string>
+    <string name="settings_keyboard_candidate_bar">候選列</string>
+    <string name="settings_keyboard_shortcuts">外接鍵盤快捷鍵</string>
+    <string name="settings_clipboard_usage">歷史與貼上</string>
+    <string name="settings_clipboard_rules">篩選規則</string>
+    <string name="settings_advanced_display">應用程式外觀</string>
+    <string name="settings_advanced_system">系統相容</string>
+    <string name="settings_theme_appearance">鍵盤外觀</string>
+    <string name="settings_theme_system">導覽列</string>
+    <string name="settings_theme_tools">主題工具</string>
+    <string name="ai_capture_channel_name">會意AI回覆</string>
     <!-- Preference settings -->
     <string name="qq_group_1">同文 QQ 羣 1</string>
     <string name="qq_group_2">同文 QQ 羣 2</string>
@@ -65,12 +96,12 @@
     <string name="open_source_licenses">開放源代碼軟體許可</string>
     <string name="system_default">系統預設</string>
     <string name="key_swipe_travel">觸發滑動手勢的最短距離</string>
-    <string name="trime_app_slogan">擊響中文之韻</string>
+    <string name="trime_app_slogan">聽懂話，看懂意</string>
     <string name="custom_sound_effect_name">自訂按鍵音效</string>
     <string name="setup__next">下一步</string>
     <string name="done">完成</string>
-    <string name="setup__enable_ime_hint">在語言和輸入設定中啟用<b>同文輸入法</b></string>
-    <string name="setup__select_ime_hint">選擇<b>同文輸入法</b>作為預設輸入法</string>
+    <string name="setup__enable_ime_hint">在語言和輸入設定中啟用<b>會意輸入法</b></string>
+    <string name="setup__select_ime_hint">選擇<b>會意輸入法</b>作為預設輸入法</string>
     <string name="setup__enable_ime">啟用輸入法</string>
     <string name="setup__select_ime">選擇輸入法</string>
     <string name="setup__prev">上一步</string>
@@ -127,7 +158,7 @@
     <string name="use_app_specific_storage">使用應用專用存儲空間</string>
     <string name="sync_from_external_desc">每次部署或同步使用者資料前，從指定目錄匯入資料到內部儲存空間，並在同步使用者資料後匯出到該目錄。需要較多儲存空間。建議有經驗的使用者使用。</string>
     <string name="use_app_specific_storage_desc">直接使用應用程式內部私有儲存空間，使用者需要使用支援的檔案管理器管理資料。解除安裝應用程式時，系統可能會詢問是否保留資料，請隨時做好備份。</string>
-    <string name="external_sync_select_folder_message">外部同步需要選擇資料資料夾。請選擇存放 Trime 設定檔的位置。</string>
+    <string name="external_sync_select_folder_message">外部同步需要選擇資料資料夾。請選擇存放會意輸入法設定檔的位置。</string>
     <string name="external_sync_fallback_app_storage">資料夾選擇失敗或已取消。儲存模式將還原為使用應用程式專屬儲存空間。</string>
     <string name="maintenance">維護</string>
     <string name="loading">正在載入</string>
@@ -152,7 +183,7 @@
     <string name="enable_landscape_mode">啟用橫屏模式</string>
     <string name="split_space_percent">自動分割鍵盤比例</string>
     <string name="setup__step_three">第 3 步</string>
-    <string name="setup__select_data_path_hint">選擇<b>同文輸入法</b>如何儲存 Rime 資料</string>
+    <string name="setup__select_data_path_hint">選擇<b>會意輸入法</b>如何儲存 Rime 資料</string>
     <string name="setup__select_data_path">選擇外部資料夾…</string>
     <string name="setup__data_path_imported">資料夾匯入成功</string>
     <string name="setup__data_path_import_failed">資料夾匯入失敗</string>
@@ -166,7 +197,7 @@
     <string name="grant_permission">授予權限</string>
     <string name="notification_permission_title">沒有通知權限</string>
     <string name="notification_permission_message">尚未賦予通知權限，因此無法在耗時較長的操作完成後給您發送通知。</string>
-    <string name="rime_daemon">Rime 常駐程式</string>
+    <string name="rime_daemon">會意輸入法</string>
     <string name="restarting_rime">重新啟動 Rime</string>
     <string name="select_current_schema">選擇當前方案</string>
     <string name="enable_schemata">啓用方案</string>

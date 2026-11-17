@@ -16,11 +16,13 @@ import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.InputType
+import android.view.Gravity
 import android.view.InputDevice
 import android.view.KeyCharacterMap
 import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.CursorAnchorInfo
@@ -32,8 +34,12 @@ import android.widget.FrameLayout
 import androidx.annotation.Keep
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
+import com.osfans.trime.R
+import com.osfans.trime.ai.AiInputController
 import com.osfans.trime.core.KeyModifiers
 import com.osfans.trime.core.KeyValue
 import com.osfans.trime.core.RimeApi
@@ -68,6 +74,7 @@ import timber.log.Timber
 /** [輸入法][InputMethodService]主程序  */
 
 open class TrimeInputMethodService : LifecycleInputMethodService() {
+    val aiInputController by lazy { AiInputController(this) }
     private lateinit var rime: RimeSession
     private val jobs = Channel<Job>(capacity = Channel.UNLIMITED)
 
@@ -76,6 +83,22 @@ open class TrimeInputMethodService : LifecycleInputMethodService() {
     private lateinit var contentView: FrameLayout
     private lateinit var lastKnownConfig: Configuration
     private var inputView: InputView? = null
+
+    fun currentKeyboardTopOnScreen(): Int? {
+        val keyboard = inputView?.keyboardView?.takeIf { it.isShown && it.height > 0 } ?: return null
+        val location = IntArray(2)
+        keyboard.getLocationOnScreen(location)
+        return location[1].takeIf { it > 0 }
+    }
+
+    fun showHeldVoiceRecording(show: Boolean, atLimit: Boolean = false) {
+        inputView?.showHeldVoiceRecording(show, atLimit)
+    }
+
+    fun updateHeldVoiceRecording(seconds: Int? = null, level: Float? = null) {
+        inputView?.updateHeldVoiceRecording(seconds, level)
+    }
+
     private var candidatesView: CandidatesView? = null
     private val navBarManager = NavigationBarManager()
     private val inputDeviceManager = InputDeviceManager { useVirtualKeyboard, useCandidatesView ->
@@ -198,8 +221,18 @@ open class TrimeInputMethodService : LifecycleInputMethodService() {
         lifecycleScope.launch {
             rime.runOnReady {
                 ThemeManager.init(resources.configuration)
-                ThemeManager.addOnChangedListener(onThemeChangeListener)
-                ColorManager.addOnChangedListener(onColorChangeListener)
+            }
+            ThemeManager.addOnChangedListener(onThemeChangeListener)
+            ColorManager.addOnChangedListener(onColorChangeListener)
+            // Android can request the input view before Rime/theme loading finishes.
+            // The initial theme notification has already happened at this point.
+            if (inputView == null && ::contentView.isInitialized) {
+                themeScope?.let { scope ->
+                    replaceInputViews(scope)
+                    if (isInputViewShown) {
+                        currentInputEditorInfo?.let { inputView?.startInput(it, false) }
+                    }
+                }
             }
         }
         InputFeedbackManager.init(this)
@@ -327,10 +360,11 @@ open class TrimeInputMethodService : LifecycleInputMethodService() {
         navBarManager.evaluate(window.window!!, inputDeviceManager.useVirtualKeyboard, scope.colors)
         replaceInputView(scope)
         replaceCandidateView(scope)
-        inputView?.updateEnterKeyLabel(currentInputEditorInfo)
+        currentInputEditorInfo?.let { inputView?.updateEnterKeyLabel(it) }
     }
 
     override fun onDestroy() {
+        aiInputController.destroy()
         InputFeedbackManager.destroy()
         inputView = null
         recreateInputViewPrefs.forEach {
@@ -435,6 +469,7 @@ open class TrimeInputMethodService : LifecycleInputMethodService() {
         candidatesStart: Int,
         candidatesEnd: Int,
     ) {
+        if (oldSelStart != newSelStart || oldSelEnd != newSelEnd) aiInputController.onSelectionChanged()
         super.onUpdateSelection(
             oldSelStart,
             oldSelEnd,
@@ -536,6 +571,7 @@ open class TrimeInputMethodService : LifecycleInputMethodService() {
         attribute: EditorInfo,
         restarting: Boolean,
     ) {
+        aiInputController.onEditorStarted()
         composingText = ""
         Timber.d("onStartInput: restarting=$restarting")
         val isNullType = attribute.inputType and InputType.TYPE_MASK_CLASS == InputType.TYPE_NULL
@@ -568,6 +604,7 @@ open class TrimeInputMethodService : LifecycleInputMethodService() {
         restarting: Boolean,
     ) {
         Timber.d("onStartInputView: restarting=$restarting")
+        android.os.Handler(android.os.Looper.getMainLooper()).post { aiInputController.maybeShowPendingSuggestions() }
         InputFeedbackManager.startInput()
         postRimeJob {
             updateRimeOption(this)
@@ -590,6 +627,7 @@ open class TrimeInputMethodService : LifecycleInputMethodService() {
     }
 
     override fun onFinishInputView(finishingInput: Boolean) {
+        aiInputController.onEditorHidden()
         Timber.d("onFinishInputView: finishingInput=$finishingInput")
         decorLocationUpdated = false
         inputView?.dismissCandidateActionMenu()
@@ -618,6 +656,41 @@ open class TrimeInputMethodService : LifecycleInputMethodService() {
         lastCommittedText = text
         composingText = ""
         InputFeedbackManager.textCommitSpeak(text)
+    }
+
+    /** Commit an approved AI result through the live editor and report rejection to the caller. */
+    fun commitAiText(text: String): Boolean {
+        val connection = currentInputConnection ?: return false
+        if (!connection.commitText(text, 1)) return false
+        lastCommittedText = text
+        composingText = ""
+        postRimeJob { clearComposition() }
+        InputFeedbackManager.textCommitSpeak(text)
+        return true
+    }
+
+    /** Replace a previously verified full draft. The caller rechecks the editor before invoking this. */
+    fun replaceAiWholeDraft(text: String, originalLength: Int, originalCursor: Int): Boolean {
+        val connection = currentInputConnection ?: return false
+        connection.beginBatchEdit()
+        return try {
+            if (!connection.setSelection(0, originalLength)) return false
+            if (commitAiText(text)) {
+                true
+            } else {
+                connection.setSelection(originalCursor, originalCursor)
+                false
+            }
+        } finally {
+            connection.endBatchEdit()
+        }
+    }
+
+    /** Keep any unconfirmed composing characters when direct dictation appends at the cursor. */
+    fun commitDictationText(text: String): Boolean {
+        val connection = currentInputConnection ?: return false
+        if (!connection.finishComposingText()) return false
+        return commitAiText(text)
     }
 
     /**
@@ -1003,23 +1076,82 @@ open class TrimeInputMethodService : LifecycleInputMethodService() {
 
     private var showingDialog: Dialog? = null
 
-    fun showDialog(dialog: Dialog) {
+    fun showDialog(dialog: Dialog, alignToKeyboard: Boolean = false, onDismiss: (() -> Unit)? = null) {
         showingDialog?.dismiss()
+        var removeAlignmentListener: (() -> Unit)? = null
         dialog.window?.also {
             it.attributes.apply {
                 token = decorView.windowToken
                 type = WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG
             }
-            it.addFlags(
-                WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM or WindowManager.LayoutParams.FLAG_DIM_BEHIND,
-            )
-            it.setDimAmount(styledFloat(android.R.attr.backgroundDimAmount))
+            it.addFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
+            if (alignToKeyboard) {
+                it.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+                it.setDimAmount(0f)
+                it.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL)
+                it.setWindowAnimations(R.style.Animation_HuiyiReply)
+                // Start near the keyboard even before WindowManager has applied its insets.
+                inputView?.keyboardView?.takeIf { view -> view.isShown && view.height > 0 }?.let { keyboard ->
+                    val position = IntArray(2)
+                    keyboard.getLocationOnScreen(position)
+                    it.attributes = it.attributes.apply { y = position[1] }
+                }
+            } else {
+                it.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+                it.setDimAmount(styledFloat(android.R.attr.backgroundDimAmount))
+            }
         }
         dialog.setOnDismissListener {
-            showingDialog = null
+            removeAlignmentListener?.invoke()
+            if (showingDialog === dialog) showingDialog = null
+            onDismiss?.invoke()
+        }
+        if (alignToKeyboard) {
+            dialog.create()
+            // Install before show: no frame may draw at the temporary WindowManager position.
+            removeAlignmentListener = alignDialogToKeyboard(dialog)
         }
         dialog.show()
         showingDialog = dialog
+    }
+
+    private fun alignDialogToKeyboard(dialog: Dialog): () -> Unit {
+        val dialogWindow = requireNotNull(dialog.window)
+        val dialogView = dialogWindow.decorView
+        val keyboardLocation = IntArray(2)
+        val dialogLocation = IntArray(2)
+        val rootLocation = IntArray(2)
+        val beforeDraw = ViewTreeObserver.OnPreDrawListener {
+            val keyboard = inputView?.keyboardView ?: return@OnPreDrawListener false
+            if (!dialog.isShowing || !keyboard.isShown || keyboard.height == 0 || dialogView.height == 0) return@OnPreDrawListener false
+            keyboard.getLocationOnScreen(keyboardLocation)
+            dialogView.getLocationOnScreen(dialogLocation)
+            decorView.getLocationOnScreen(rootLocation)
+            val bottomInset = ViewCompat.getRootWindowInsets(decorView)
+                ?.getInsets(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout())?.bottom ?: 0
+            val availableBottom = minOf(keyboardLocation[1] + keyboard.height, rootLocation[1] + decorView.height - bottomInset)
+            val availableHeight = availableBottom - keyboardLocation[1]
+            if (availableHeight <= 0) return@OnPreDrawListener false
+            val offset = keyboardLocation[1] - dialogLocation[1]
+            val tooTall = dialogView.height > availableHeight
+            if (offset != 0 || tooTall) {
+                dialogWindow.attributes = dialogWindow.attributes.apply {
+                    // Use measured screen coordinates to account for status bars and window insets.
+                    y += offset
+                    if (tooTall) height = availableHeight
+                }
+                // The new attributes take effect in the next traversal. Do not expose this one.
+                return@OnPreDrawListener false
+            }
+            true
+        }
+        val keyboardLayout = ViewTreeObserver.OnGlobalLayoutListener { dialogView.requestLayout() }
+        decorView.viewTreeObserver.addOnGlobalLayoutListener(keyboardLayout)
+        dialogView.viewTreeObserver.addOnPreDrawListener(beforeDraw)
+        return {
+            if (decorView.viewTreeObserver.isAlive) decorView.viewTreeObserver.removeOnGlobalLayoutListener(keyboardLayout)
+            if (dialogView.viewTreeObserver.isAlive) dialogView.viewTreeObserver.removeOnPreDrawListener(beforeDraw)
+        }
     }
 }
 

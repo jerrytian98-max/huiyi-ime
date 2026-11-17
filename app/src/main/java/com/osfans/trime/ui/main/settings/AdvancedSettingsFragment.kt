@@ -11,11 +11,18 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.preference.PreferenceScreen
+import com.osfans.trime.R
 import com.osfans.trime.data.prefs.AppPrefs
 import com.osfans.trime.data.prefs.PreferenceDelegate
 import com.osfans.trime.data.prefs.PreferenceDelegateFragment
 
 class AdvancedSettingsFragment : PreferenceDelegateFragment(AppPrefs.defaultInstance().advanced) {
+
+    override fun onPreferenceUiCreated(screen: PreferenceScreen) {
+        screen.groupSettings(R.string.settings_advanced_display, AppPrefs.Advanced.UI_MODE, AppPrefs.Advanced.SHOW_APP_ICON)
+        screen.groupSettings(R.string.settings_advanced_system, AppPrefs.Advanced.IGNORE_SYSTEM_GESTURE_INSETS)
+    }
 
     private val uiMode = AppPrefs.defaultInstance().advanced.uiMode
 

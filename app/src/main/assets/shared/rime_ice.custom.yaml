@@ -1,0 +1,6 @@
+# Rime AI Android defaults; upstream schema is kept verbatim.
+patch:
+  switches/@0/reset: 0
+  switches/@0/states: [中文, 英文]
+  switches/@2/reset: 0
+  switches/@2/states: [简体, 繁体]

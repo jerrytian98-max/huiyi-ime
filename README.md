@@ -4,7 +4,13 @@ SPDX-FileCopyrightText: 2015 - 2024 Rime community
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
-# Trime
+# Huiyi Keyboard / 会意输入法
+
+**听懂话，看懂意。** An Android keyboard based on Trime/Rime, with speech input, AI text cleanup and screenshot-based reply suggestions. See [Huiyi setup and build instructions](README_AI.md) for this fork and its internal-test APKs.
+
+The following documentation and distribution links describe the upstream Trime project.
+
+## Upstream: Trime
 
 Rime IME for Android
 

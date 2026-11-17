@@ -10,9 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.osfans.trime.R
-import com.osfans.trime.core.data.DataStorageMode
-import com.osfans.trime.data.prefs.AppPrefs
 import com.osfans.trime.databinding.FragmentSetupBinding
 import com.osfans.trime.util.serializable
 
@@ -21,27 +18,12 @@ class SetupFragment : Fragment() {
 
     private val page: SetupPage by lazy { requireArguments().serializable("page")!! }
 
-    private val prefs = AppPrefs.defaultInstance().profile
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentSetupBinding.inflate(inflater).apply {
-            storageModeOptions.setOnCheckedChangeListener { _, checkedId ->
-                val newMode = when (checkedId) {
-                    R.id.sync_from_external_option -> DataStorageMode.EXTERNAL_SYNC
-                    R.id.app_specific_storage_option -> DataStorageMode.APP_STORAGE
-                    else -> return@setOnCheckedChangeListener
-                }
-                prefs.dataStorageMode.setValue(newMode)
-                sync()
-                (requireActivity() as SetupActivity).updateButtons()
-            }
-            syncFromExternalDesc.setOnClickListener { syncFromExternalOption.isChecked = true }
-            appSpecificStorageDesc.setOnClickListener { appSpecificStorageOption.isChecked = true }
-        }
+        binding = FragmentSetupBinding.inflate(inflater)
         sync()
         return binding.root
     }
@@ -49,18 +31,10 @@ class SetupFragment : Fragment() {
     // Called on window focus changed
     fun sync() {
         val done = page.isDone()
-        val isStorageModePage = page == SetupPage.Mode
-        val checkedId = when (prefs.dataStorageMode.getValue()) {
-            DataStorageMode.EXTERNAL_SYNC -> R.id.sync_from_external_option
-            DataStorageMode.APP_STORAGE -> R.id.app_specific_storage_option
-        }
         with(binding) {
-            storageModeOptions.visibility = if (isStorageModePage) View.VISIBLE else View.GONE
-            storageModeOptions.check(checkedId)
-
             stepText.text = page.getStepText(requireContext())
             hintText.text = page.getHintText(requireContext())
-            val showActionButton = !done && page.showActionButton()
+            val showActionButton = !done
             actionButton.visibility = if (showActionButton) View.VISIBLE else View.GONE
             actionButton.text = page.getButtonText(requireContext())
             actionButton.setOnClickListener { page.getButtonAction(requireActivity()) }

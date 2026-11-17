@@ -4,7 +4,13 @@ SPDX-FileCopyrightText: 2015 - 2024 Rime community
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
-# 同文 Android 輸入法平臺
+# 會意輸入法
+
+**聽懂話，看懂意。** 基於 Trime/Rime 的 Android 輸入法，支援語音輸入、AI 文字整理及截圖回覆建議。目前內測版的安裝與建置請閱讀[會意輸入法說明](README_AI.md)。
+
+以下保留 Trime/同文輸入法的上游說明及下載連結。
+
+## 上游：同文 Android 輸入法平臺
 
 ![build](https://github.com/osfans/trime/actions/workflows/commit-ci.yml/badge.svg?branch=develop)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)

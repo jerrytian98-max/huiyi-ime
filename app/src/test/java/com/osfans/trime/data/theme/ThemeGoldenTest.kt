@@ -55,8 +55,8 @@ class ThemeGoldenTest :
                     enterLabel.default shouldBe "Enter"
                 }
 
-                Then("all 50 preset keyboards are decoded") {
-                    theme.presetKeyboards.size shouldBe 50
+                Then("all 52 preset keyboards are decoded") {
+                    theme.presetKeyboards.size shouldBe 52
                     theme.presetKeyboards shouldContainKey "default"
                     theme.presetKeyboards shouldContainKey "letter"
                     theme.presetKeyboards shouldContainKey "number"
@@ -81,11 +81,11 @@ class ThemeGoldenTest :
                     firstKey.keyTextColor shouldBe "th1"
                 }
 
-                Then("all 46 color schemes are decoded, with the default scheme intact") {
-                    theme.presetColorSchemes.size shouldBe 46
+                Then("both light and dark color schemes are decoded") {
+                    theme.presetColorSchemes.keys shouldBe setOf("default", "dark")
                     val defaultScheme = theme.presetColorSchemes.entries.first { it.key == "default" }
-                    defaultScheme.value["name"] shouldBe "标准配色！"
-                    defaultScheme.value["dark_scheme"] shouldBe "steam"
+                    defaultScheme.value["name"] shouldBe "浅色"
+                    defaultScheme.value["dark_scheme"] shouldBe "dark"
                 }
 
                 Then("fallback colors override table is decoded") {
@@ -106,7 +106,7 @@ class ThemeGoldenTest :
 
             When("the whole file is decoded") {
                 Then("theme header and style scalars are preserved") {
-                    theme.name shouldBe "預設"
+                    theme.name shouldBe "预设"
                     val style = theme.style
                     style.candidateTextSize shouldBe 22f
                     style.keyHeight shouldBe 44
@@ -114,22 +114,22 @@ class ThemeGoldenTest :
                 }
 
                 Then("color schemes and preset keys are decoded") {
-                    theme.presetColorSchemes.size shouldBe 37
+                    theme.presetColorSchemes.keys shouldBe setOf("default", "dark")
                     theme.presetKeys.size shouldBe 106
                     val brightnessDown = theme.presetKeys.getValue("BRIGHTNESS_DOWN")
                     brightnessDown.label shouldBe "亮度-"
                     brightnessDown.send shouldBe "BRIGHTNESS_DOWN"
                 }
 
-                Then("all 18 plain keyboards are decoded with their keys") {
-                    theme.presetKeyboards.size shouldBe 18
+                Then("all 20 plain keyboards are decoded with their keys") {
+                    theme.presetKeyboards.size shouldBe 20
                     theme.presetKeyboards shouldContainKey "default"
                     theme.presetKeyboards shouldContainKey "qwerty0"
                     theme.presetKeyboards shouldContainKey "cangjie5"
                     theme.presetKeyboards shouldContainKey "array30"
 
                     val default = theme.presetKeyboards.getValue("default")
-                    default.name shouldBe "預設40鍵"
+                    default.name shouldBe "预设40键"
                     default.width shouldBe 10f
                     default.height shouldBe 44f
                     default.lock shouldBe true

@@ -310,6 +310,9 @@ object InputFeedbackManager {
     }
 
     @MainThread
+    fun stopSpeechFeedback() = resetSpeechRequests()
+
+    @MainThread
     fun finishInput() {
         resetSpeechRequests()
         effectPlayProgress = 0

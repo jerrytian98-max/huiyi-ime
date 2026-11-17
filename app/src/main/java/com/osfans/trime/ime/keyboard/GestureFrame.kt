@@ -205,19 +205,21 @@ open class GestureFrame(context: Context) : FrameLayout(context) {
             }
 
             MotionEvent.ACTION_CANCEL -> {
-                isPressed = false
-                cancelJobs()
-
-                isLongPressed = false
-                slideActivated = false
-                swipeTriggered = false
-
-                onCancel?.invoke()
+                cancelGesture()
                 return true
             }
         }
 
         return true
+    }
+
+    protected fun cancelGesture() {
+        isPressed = false
+        cancelJobs()
+        isLongPressed = false
+        slideActivated = false
+        swipeTriggered = false
+        onCancel?.invoke()
     }
 
     private fun startLongPressJob(currentTouchId: Int) {

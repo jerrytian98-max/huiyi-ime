@@ -30,7 +30,14 @@ sealed class SwitchOptionEntry(
     ) : SwitchOptionEntry(label, icon)
 
     companion object {
+        // Keep advanced Rime options available to the schema without crowding the switch panel.
+        private val hiddenSwitchNames =
+            setOf("ascii_punct", "traditionalization", "emoji", "full_shape", "search_single_char")
+
+        internal fun isVisibleSwitch(switch: RimeSchema.Switch): Boolean = switch.name !in hiddenSwitchNames
+
         fun fromSwitch(rime: RimeSession, it: RimeSchema.Switch): Custom? {
+            if (!isVisibleSwitch(it)) return null
             val labels = it.states
             if (labels.size <= 1) return null
             return if (it.name.isNotEmpty()) {

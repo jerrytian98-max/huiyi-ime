@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
+import com.osfans.trime.ai.HeldVoiceWaveformView
 import com.osfans.trime.core.CompositionProto
 import com.osfans.trime.core.RimeMessage
 import com.osfans.trime.daemon.RimeSession
@@ -164,6 +165,11 @@ class InputView(
         }
 
     val keyboardView: View
+    private val heldVoiceWaveform = HeldVoiceWaveformView(context)
+
+    fun showHeldVoiceRecording(show: Boolean, atLimit: Boolean = false) = heldVoiceWaveform.showRecording(show, atLimit)
+
+    fun updateHeldVoiceRecording(seconds: Int? = null, level: Float? = null) = heldVoiceWaveform.update(seconds, level)
 
     /** Restyles colors after a scheme switch without rebuilding the view tree. */
     fun refreshColors() {
@@ -232,6 +238,15 @@ class InputView(
                         startToEndOf(leftPaddingSpace)
                         endToStartOf(rightPaddingSpace)
                         bottomOfParent()
+                    },
+                )
+                // Drawing-only overlay: never detach/hide the pressed key or intercept its touch stream.
+                add(
+                    heldVoiceWaveform,
+                    lParams(matchParent, 0) {
+                        topOfParent()
+                        above(bottomPaddingSpace)
+                        centerHorizontally()
                     },
                 )
             }

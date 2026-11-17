@@ -13,9 +13,10 @@ import androidx.preference.PreferenceScreen
 import com.osfans.trime.R
 import com.osfans.trime.data.prefs.PreferenceDelegateFragment
 import com.osfans.trime.data.theme.ThemeManager
+import com.osfans.trime.data.theme.ThemePrefs
 import com.osfans.trime.ui.main.settings.ColorPickerDialog
 import com.osfans.trime.ui.main.settings.ThemePickerDialog
-import com.osfans.trime.util.addPreference
+import com.osfans.trime.ui.main.settings.groupSettings
 import com.osfans.trime.util.startActivity
 import kotlinx.coroutines.launch
 
@@ -37,11 +38,24 @@ class ThemeSettingsFragment : PreferenceDelegateFragment(ThemeManager.prefs) {
 
     override fun onPreferenceUiCreated(screen: PreferenceScreen) {
         screen.addPreference(
-            R.string.theme_diagnostics,
-            R.string.theme_diagnostics_summary,
-        ) {
-            startActivity<ThemeDiagnosticsActivity>()
-        }
+            Preference(requireContext()).apply {
+                key = "theme_diagnostics"
+                setTitle(R.string.theme_diagnostics)
+                setSummary(R.string.theme_diagnostics_summary)
+                setOnPreferenceClickListener {
+                    startActivity<ThemeDiagnosticsActivity>()
+                    true
+                }
+            },
+        )
+        screen.groupSettings(
+            R.string.settings_theme_appearance,
+            ThemePrefs.SELECTED_THEME,
+            ThemePrefs.NORMAL_MODE_COLOR,
+            ThemePrefs.FOLLOW_SYSTEM_DAY_NIGHT,
+        )
+        screen.groupSettings(R.string.settings_theme_system, ThemePrefs.NAVBAR_BACKGROUND)
+        screen.groupSettings(R.string.settings_theme_tools, "theme_diagnostics")
     }
 
     override fun onStop() {

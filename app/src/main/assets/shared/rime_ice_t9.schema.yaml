@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Derived from the bundled Rime Ice schema; the original schema and dictionary stay unchanged.
+# librime's deployer reads this ID before expanding includes and patches.
+schema:
+  schema_id: rime_ice_t9
+__include: rime_ice.schema:/
+__patch:
+  schema/schema_id: rime_ice_t9
+  schema/name: 雾凇拼音·九宫格
+  schema/version: "2026-11-06"
+  schema/description: 会意输入法九宫格拼音，使用雾凇词库。
+  switches/@0/reset: 0
+  switches/@0/states: [中文, 英文]
+  switches/@2/reset: 0
+  switches/@2/states: [简体, 繁体]
+  translator/prism: rime_ice_t9
+  translator/user_dict: rime_ice
+  speller/alphabet: "23456789"
+  speller/initials: "23456789"
+  speller/delimiter: " '"
+  speller/algebra:
+    - abbrev/^([a-z]).+$/$1/
+    - xlit/abcdefghijklmnopqrstuvwxyz/22233344455566677778889999/
+  editor/bindings/Return: confirm

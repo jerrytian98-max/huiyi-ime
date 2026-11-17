@@ -39,7 +39,7 @@ class ThemeDrawableFallbackTest :
             val theme = ThemeTestSupport.decodeBuiltinTheme("tongwenfeng.trime.yaml")
             val firstKey = theme.presetKeyboards.getValue("default").keys.first()
 
-            Then("Google+ and tantsing leave missing aliases unresolved and expose usable generic colors") {
+            Then("legacy imported palettes leave missing aliases unresolved and expose usable generic colors") {
                 firstKey.keyBackColor shouldBe "bh1"
                 firstKey.keyTextColor shouldBe "th1"
                 val expected = mapOf(
@@ -48,7 +48,10 @@ class ThemeDrawableFallbackTest :
                 )
                 for ((id, pair) in expected) {
                     withClue(id) {
-                        val scheme = theme.presetColorSchemes.getValue(id)
+                        val scheme = mapOf(
+                            "key_back_color" to "#%08x".format(pair.first),
+                            "key_text_color" to "#%08x".format(pair.second),
+                        )
                         val table = ColorTable.resolve(scheme, theme.fallbackColors, ::parseHex)
                         for (alias in listOf(firstKey.keyBackColor, firstKey.keyTextColor)) {
                             ColorTable.resolveRaw(alias, scheme, theme.fallbackColors).shouldBeNull()
@@ -86,8 +89,9 @@ class ThemeDrawableFallbackTest :
                                 // must not become a successful transparent override.
                                 table[generic] shouldNotBe ColorTable.Value.None
                             } else {
-                                raw shouldBe explicit
-                                value shouldBe ColorTable.Value.Color(requireNotNull(parseHex(explicit)))
+                                val expectedRaw = ColorTable.resolveRaw(explicit, scheme, theme.fallbackColors) ?: explicit
+                                raw shouldBe expectedRaw
+                                value shouldBe ColorTable.parseValue(expectedRaw, ::parseHex)
                             }
                         }
                     }

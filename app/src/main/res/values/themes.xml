@@ -7,6 +7,10 @@ SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
 <resources>
+    <style name="Animation.HuiyiReply" parent="@android:style/Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/huiyi_reply_enter</item>
+        <item name="android:windowExitAnimation">@anim/huiyi_reply_exit</item>
+    </style>
     <style name="Theme.TrimeAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -15,4 +19,26 @@ SPDX-License-Identifier: GPL-3.0-or-later
     </style>
 
     <style name="Theme.DialogTheme" parent="@android:style/Theme.DeviceDefault.Light.Dialog" />
+    <style name="Theme.HuiyiAiLight" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="Theme.HuiyiAiDark" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:colorAccent">@color/colorAccentDark</item>
+    </style>
+    <style name="Theme.HuiyiAiReplyLight" parent="Theme.HuiyiAiLight">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+    <style name="Theme.HuiyiAiReplyDark" parent="Theme.HuiyiAiDark">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+    <style name="Theme.HuiyiAiDialogLight" parent="@android:style/Theme.Material.Light.Dialog.Alert">
+        <item name="android:colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="Theme.HuiyiAiDialogDark" parent="@android:style/Theme.Material.Dialog.Alert">
+        <item name="android:colorAccent">@color/colorAccentDark</item>
+    </style>
 </resources>

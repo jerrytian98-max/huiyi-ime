@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="ai_quick_capture_name">会意快捷截屏</string>
+    <string name="ai_quick_capture_description">短按“AI回复”截取当前屏幕；上拖后松手，程序自动模拟手指向下拖动聊天区域，回看更早记录并截取最多五屏，拼接后发送到你配置的 AI 服务。可点击“停止”取消。只在本次操作中查询前台区域并模拟有限下拉，不读取控件文字，不在后台截屏。图片可能包含个人信息，可随时在无障碍设置中关闭。</string>
+</resources>
