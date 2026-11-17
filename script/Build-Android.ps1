@@ -2,7 +2,8 @@
 [CmdletBinding()]
 param(
     [string[]]$Tasks = @(':app:assembleDebug'),
-    [string]$Abis = 'arm64-v8a,x86_64'
+    [string]$Abis = 'arm64-v8a,x86_64',
+    [switch]$PublicRelease
 )
 $ErrorActionPreference = 'Stop'
 $repoPath = Split-Path -Parent $PSScriptRoot
@@ -25,10 +26,12 @@ $localSdk = Join-Path $workspacePath '.tools\sdk'
 if (Test-Path -LiteralPath $localSdk) { $env:ANDROID_HOME = $localSdk; $env:ANDROID_SDK_ROOT = $localSdk }
 if (-not $env:JAVA_HOME -or -not $env:ANDROID_HOME) { throw 'Install JDK and Android SDK, then set JAVA_HOME and ANDROID_HOME.' }
 $env:BUILD_ABI = $Abis
+$extraGradleArgs = @()
+if ($PublicRelease) { $extraGradleArgs += '-PpublicRelease=true' }
 $localGradle = Join-Path $workspacePath '.tools\gradle\gradle-9.8.1\bin\gradle.bat'
 Push-Location $repoPath
 try {
-    if (Test-Path -LiteralPath $localGradle) { & $localGradle @Tasks --max-workers=4 --console=plain }
-    else { & .\gradlew.bat @Tasks --max-workers=4 --console=plain }
+    if (Test-Path -LiteralPath $localGradle) { & $localGradle @Tasks --max-workers=4 --console=plain @extraGradleArgs }
+    else { & .\gradlew.bat @Tasks --max-workers=4 --console=plain @extraGradleArgs }
     if ($LASTEXITCODE -ne 0) { throw "Gradle failed: $LASTEXITCODE" }
 } finally { Pop-Location }

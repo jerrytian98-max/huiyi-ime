@@ -21,15 +21,16 @@ plugins {
 // Local, ignored build input contains an AES-GCM envelope, never a plaintext
 // API key. The wrapping material necessarily ships in an internal-test APK;
 // this is obfuscation at distribution time, not a substitute for a backend.
+val publicRelease = providers.gradleProperty("publicRelease").orNull?.toBoolean() == true
 val bundledAiDefaults = Properties().apply {
-    rootProject.file("local-ai-defaults.properties").takeIf { it.isFile }?.inputStream()?.use { load(it) }
+    if (!publicRelease) rootProject.file("local-ai-defaults.properties").takeIf { it.isFile }?.inputStream()?.use { load(it) }
 }
 fun bundledAiField(name: String): String = bundledAiDefaults.getProperty(name, "").also {
     require(it.matches(Regex("[A-Za-z0-9+/=]*"))) { "Invalid bundled AI build input" }
 }
 
 val bundledSpeechDefaults = Properties().apply {
-    rootProject.file("local-tencent-asr-defaults.properties").takeIf { it.isFile }?.inputStream()?.use { load(it) }
+    if (!publicRelease) rootProject.file("local-tencent-asr-defaults.properties").takeIf { it.isFile }?.inputStream()?.use { load(it) }
 }
 fun bundledSpeechField(name: String): String = bundledSpeechDefaults.getProperty(name, "").also {
     require(it.matches(Regex("[A-Za-z0-9+/=]*"))) { "Invalid bundled speech build input" }

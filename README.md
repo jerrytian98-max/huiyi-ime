@@ -57,10 +57,10 @@ git submodule update --init --recursive
 在 Windows 配置 `JAVA_HOME`、`ANDROID_HOME` 后构建调试包：
 
 ```powershell
-./gradlew.bat :app:assembleDebug
+./gradlew.bat :app:assembleDebug -PpublicRelease=true
 ```
 
-也可以运行 `script/Build-Android.ps1`。不提供 AI 密钥时，普通中英文输入仍可使用；AI 功能需由安装者自行配置服务。正式发布请使用自己的签名密钥，并妥善保存。
+也可以运行 `script/Build-Android.ps1 -PublicRelease`。公开构建会忽略本机内测凭证文件；普通中英文输入仍可使用，AI 功能需由安装者自行配置服务。正式发布请使用自己的签名密钥，并妥善保存。
 
 ## 许可证与致谢
 
