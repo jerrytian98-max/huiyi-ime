@@ -21,8 +21,15 @@ class AiCaptureActivity : Activity() {
         super.onCreate(savedInstanceState)
         requestId = savedInstanceState?.getString(EXTRA_REQUEST_ID)
             ?: intent.getStringExtra(EXTRA_REQUEST_ID) ?: UUID.randomUUID().toString()
+        val requiresIntent = intent.getBooleanExtra(EXTRA_REQUIRE_INTENT, false)
+        if (requiresIntent && !AiEvents.hasReplyIntent(requestId)) {
+            AiEvents.cancelCapture(requestId)
+            Toast.makeText(this, "本次回复要求已失效，请重新下滑说话", Toast.LENGTH_LONG).show()
+            finish()
+            return
+        }
         if (savedInstanceState == null) {
-            if (!AiEvents.beginCapture(requestId)) {
+            if (!requiresIntent && !AiEvents.beginCapture(requestId)) {
                 startActivity(Intent(this, AiReplyActivity::class.java))
                 finish()
                 return
@@ -84,6 +91,7 @@ class AiCaptureActivity : Activity() {
 
     companion object {
         const val EXTRA_REQUEST_ID = "ai_capture_request_id"
+        const val EXTRA_REQUIRE_INTENT = "ai_capture_requires_intent"
         private const val REQUEST_CAPTURE = 7301
     }
 }

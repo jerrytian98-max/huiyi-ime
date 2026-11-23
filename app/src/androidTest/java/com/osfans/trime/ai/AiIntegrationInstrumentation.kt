@@ -18,6 +18,9 @@ import javax.net.ssl.TrustManagerFactory
 /** Runs only in the separately installed test APK against a synthetic HTTPS provider. */
 class AiIntegrationInstrumentation : Instrumentation() {
     private var longCapture = false
+    private var replyIntentGesture = false
+    private var replyIntentNetwork = false
+    private var replyIntentUi = false
     private var voiceWaveform = false
     private var capturePosition = false
     private var spaceHold = false
@@ -40,6 +43,9 @@ class AiIntegrationInstrumentation : Instrumentation() {
     override fun onCreate(arguments: Bundle?) {
         super.onCreate(arguments)
         longCapture = arguments?.getString("longCapture") == "true"
+        replyIntentGesture = arguments?.getString("replyIntentGesture") == "true"
+        replyIntentNetwork = arguments?.getString("replyIntentNetwork") == "true"
+        replyIntentUi = arguments?.getString("replyIntentUi") == "true"
         voiceWaveform = arguments?.getString("voiceWaveform") == "true"
         capturePosition = arguments?.getString("capturePosition") == "true"
         spaceHold = arguments?.getString("spaceHold") == "true"
@@ -62,6 +68,18 @@ class AiIntegrationInstrumentation : Instrumentation() {
         start()
     }
     override fun onStart() {
+        if (replyIntentUi) {
+            ReplyIntentUiChecks.run(this)
+            return
+        }
+        if (replyIntentNetwork) {
+            ReplyIntentNetworkChecks.run(this)
+            return
+        }
+        if (replyIntentGesture) {
+            ReplyIntentGestureChecks.run(this)
+            return
+        }
         if (longCapture) {
             if (android.os.Build.VERSION.SDK_INT >= 30) {
                 LongCaptureChecks.run(this)

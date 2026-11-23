@@ -23,6 +23,8 @@ internal class HeldVoiceWaveformView(context: Context) : View(context) {
     private var startedAt = 0L
     private var seconds = 0
     private var limitReached = false
+    private var replyIntent = false
+    private var cancelling = false
 
     init {
         visibility = GONE
@@ -32,12 +34,13 @@ internal class HeldVoiceWaveformView(context: Context) : View(context) {
         accessibilityLiveRegion = ACCESSIBILITY_LIVE_REGION_POLITE
     }
 
-    fun showRecording(show: Boolean, atLimit: Boolean = false) {
+    fun showRecording(show: Boolean, atLimit: Boolean = false, replyIntent: Boolean = false) {
         if (!show) {
             visibility = GONE
             targetLevel = 0f
             displayedLevel = 0f
             lastFrame = 0L
+            cancelling = false
             return
         }
         if (visibility != VISIBLE) {
@@ -46,18 +49,42 @@ internal class HeldVoiceWaveformView(context: Context) : View(context) {
             seconds = 0
         }
         limitReached = atLimit
+        this.replyIntent = replyIntent
         if (atLimit) {
             targetLevel = 0f
             displayedLevel = 0f
         }
-        contentDescription = if (atLimit) "录音已达60秒，松开空格开始转写" else "正在语音输入，松开空格转写，上滑取消"
+        updateDescription()
         visibility = VISIBLE
         invalidate()
     }
 
-    fun update(seconds: Int? = null, level: Float? = null) {
+    fun update(seconds: Int? = null, level: Float? = null, cancelling: Boolean? = null) {
         seconds?.let { this.seconds = it }
         level?.let { targetLevel = if (it.isFinite()) it.coerceIn(0f, 1f) else 0f }
+        cancelling?.let {
+            this.cancelling = it
+            updateDescription()
+            invalidate()
+        }
+    }
+
+    private fun hint(): String = when {
+        replyIntent && cancelling -> "松手取消 · 移回继续说"
+        replyIntent && limitReached -> "已达 60 秒，松手截图回复"
+        replyIntent -> "松手截图回复 · 左滑取消"
+        limitReached -> "已达 60 秒，松开空格开始转写"
+        else -> "松开空格转写 · 上滑取消"
+    }
+
+    private fun updateDescription() {
+        contentDescription = if (replyIntent) {
+            "说说你想怎么回，${hint()}"
+        } else if (limitReached) {
+            "录音已达60秒，松开空格开始转写"
+        } else {
+            "正在语音输入，松开空格转写，上滑取消"
+        }
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -82,11 +109,24 @@ internal class HeldVoiceWaveformView(context: Context) : View(context) {
             val x = cx + position * spacing
             canvas.drawRoundRect(x - barWidth / 2, cy - half, x + barWidth / 2, cy + half, barWidth, barWidth, paint)
         }
-        drawText(canvas, if (limitReached) "录音已完成" else "正在聆听", cx, height * 0.19f, 19f, AiUiStyle.text, true)
+        drawText(
+            canvas,
+            when {
+                cancelling -> "松手取消"
+                replyIntent -> "说说你想怎么回"
+                limitReached -> "录音已完成"
+                else -> "正在聆听"
+            },
+            cx,
+            height * 0.19f,
+            19f,
+            AiUiStyle.text,
+            true,
+        )
         drawText(canvas, "%02d:%02d".format(seconds / 60, seconds % 60), cx, height * 0.71f, 14f, AiUiStyle.secondary)
-        drawText(canvas, if (limitReached) "已达 60 秒，松开空格开始转写" else "松开空格转写 · 上滑取消", cx, height * 0.88f, 14f, AiUiStyle.secondary)
+        drawText(canvas, hint(), cx, height * 0.88f, 14f, AiUiStyle.secondary)
         val size = (19 * density).toInt()
-        mic?.apply {
+        mic?.takeUnless { replyIntent }?.apply {
             setTint(AiUiStyle.accent)
             val x = (cx - 50 * density).toInt()
             val y = (height * 0.19f - size / 2f).toInt()

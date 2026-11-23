@@ -7,11 +7,13 @@
 
 ## 下载
 
-**最新 Android APK：**[会意输入法 v0.1.43（arm64，适用于大多数安卓手机）](https://github.com/jerrytian98-max/huiyi-ime/releases/latest/download/huiyi-android-v0.1.43-arm64-debug.apk)
+**最新 Android APK：**[会意输入法 v0.1.44（arm64，适用于大多数安卓手机）](https://github.com/jerrytian98-max/huiyi-ime/releases/latest/download/huiyi-android-v0.1.44-arm64-debug.apk)
 
 也可前往[全部版本与更新记录](https://github.com/jerrytian98-max/huiyi-ime/releases)查看 APK、发布日期和校验值。此为 Android 调试签名版本；卸载重装或更换签名版本时，系统可能要求先卸载旧版本，应用内设置也可能随卸载清除。Android 8.0 及以上可安装。桌面端和 iOS 版本目前尚未提供。
 
 ## 能做什么
+
+**AI回复手势：短按截屏，上滑截长图，下滑说要求。** 按住「AI回复」向下滑动，看到录音动画后说出这次想怎么回复；松手后自动转写要求、截图理解聊天并生成回复。录音时向左滑进入取消区域，松手放弃；移回可继续说。默认直接填写第一条，开启「提供多个回复选项」后显示三条。本次要求仅绑定这轮截图，再次生成保留，下次普通截图清空。
 
 - **中英文输入：**内置雾凇拼音简体方案，提供全键盘和九宫格布局；可切换浅色、深色主题，并支持常用符号及剪贴板输入。
 - **按住空格说话：**长按空格开始录音，松开后转写并把文字放到当前输入光标。云端转写需要在 AI 设置里配置服务；录音期间键盘显示音频律动反馈。

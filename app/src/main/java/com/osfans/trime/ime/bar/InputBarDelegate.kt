@@ -149,6 +149,10 @@ class InputBarDelegate(override val di: DI) :
             onAiLongScreenStart = { top, status -> service.aiInputController.startLongScreenAnalysis(top, status) },
             onAiLongScreenFinish = { service.aiInputController.finishLongScreenAnalysis(it) },
             onAiLongScreenCancel = { service.aiInputController.cancelLongScreenAnalysis(it) },
+            onAiReplyIntentStart = { status -> service.aiInputController.startHeldReplyIntent(status) },
+            onAiReplyIntentFinish = { service.aiInputController.finishHeldVoice(it) },
+            onAiReplyIntentCancel = { service.aiInputController.cancelHeldVoice(it) },
+            onAiReplyIntentCancelling = { id, cancelling -> service.aiInputController.updateReplyIntentCancellation(id, cancelling) },
             onAiSettings = { service.aiInputController.openSettings() },
         ).apply {
             hideKeyboardButton.apply {

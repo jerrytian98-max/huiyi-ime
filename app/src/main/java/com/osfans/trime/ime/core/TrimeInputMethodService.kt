@@ -91,12 +91,12 @@ open class TrimeInputMethodService : LifecycleInputMethodService() {
         return location[1].takeIf { it > 0 }
     }
 
-    fun showHeldVoiceRecording(show: Boolean, atLimit: Boolean = false) {
-        inputView?.showHeldVoiceRecording(show, atLimit)
+    fun showHeldVoiceRecording(show: Boolean, atLimit: Boolean = false, replyIntent: Boolean = false) {
+        inputView?.showHeldVoiceRecording(show, atLimit, replyIntent)
     }
 
-    fun updateHeldVoiceRecording(seconds: Int? = null, level: Float? = null) {
-        inputView?.updateHeldVoiceRecording(seconds, level)
+    fun updateHeldVoiceRecording(seconds: Int? = null, level: Float? = null, cancelling: Boolean? = null) {
+        inputView?.updateHeldVoiceRecording(seconds, level, cancelling)
     }
 
     private var candidatesView: CandidatesView? = null

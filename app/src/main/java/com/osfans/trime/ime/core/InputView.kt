@@ -167,9 +167,9 @@ class InputView(
     val keyboardView: View
     private val heldVoiceWaveform = HeldVoiceWaveformView(context)
 
-    fun showHeldVoiceRecording(show: Boolean, atLimit: Boolean = false) = heldVoiceWaveform.showRecording(show, atLimit)
+    fun showHeldVoiceRecording(show: Boolean, atLimit: Boolean = false, replyIntent: Boolean = false) = heldVoiceWaveform.showRecording(show, atLimit, replyIntent)
 
-    fun updateHeldVoiceRecording(seconds: Int? = null, level: Float? = null) = heldVoiceWaveform.update(seconds, level)
+    fun updateHeldVoiceRecording(seconds: Int? = null, level: Float? = null, cancelling: Boolean? = null) = heldVoiceWaveform.update(seconds, level, cancelling)
 
     /** Restyles colors after a scheme switch without rebuilding the view tree. */
     fun refreshColors() {

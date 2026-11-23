@@ -459,10 +459,10 @@ class AiAccessibilityCaptureService : AccessibilityService() {
         val isConnected: Boolean get() = instance != null
 
         /** Main thread only. False means the caller must use ordinary projection consent. */
-        fun tryCapture(context: android.content.Context, requestId: String): Boolean {
+        fun tryCapture(context: android.content.Context, requestId: String, replyIntent: String = ""): Boolean {
             val service = instance ?: return false
             if (!AiQuickCapture.isReady(context)) return false
-            if (AiEvents.beginCapture(requestId)) service.capture(requestId)
+            if (AiEvents.beginCapture(requestId, replyIntent)) service.capture(requestId)
             return true
         }
 

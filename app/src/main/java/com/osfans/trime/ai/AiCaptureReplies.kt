@@ -32,7 +32,7 @@ internal object AiCaptureReplies {
                 AiEvents.addCaptureObserver(observer)
                 try {
                     if (AiEvents.captureState != analysis.state) return@coroutineScope emptyList()
-                    withTimeout(60_000) { AiClient.suggestReplies(config, analysis.jpeg, analysis.previousReplies) }
+                    withTimeout(60_000) { AiClient.suggestReplies(config, analysis.jpeg, analysis.previousReplies, analysis.replyIntent) }
                 } finally {
                     AiEvents.removeCaptureObserver(observer)
                 }

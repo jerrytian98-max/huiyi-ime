@@ -39,14 +39,23 @@ object AiClient {
         return request(config, config.model, messages, 3000, onPartial)
     }
 
-    suspend fun suggestReplies(config: AiConfig, jpeg: ByteArray, previousReplies: List<String> = emptyList()): List<String> {
+    suspend fun suggestReplies(config: AiConfig, jpeg: ByteArray, previousReplies: List<String> = emptyList(), replyIntent: String = ""): List<String> {
         require(config.isVisionReady) { "请先配置 AI 服务地址、AI回复模型和 API Key" }
         AiReplyPrompt.validate(config.replySystemPrompt)
+        AiReplyPrompt.validateIntent(replyIntent)
         require(jpeg.isNotEmpty() && jpeg.size <= 10 * 1024 * 1024) { "截屏为空或过大，请重新截屏" }
         return withContext(Dispatchers.IO) {
             val dataUrl = "data:image/jpeg;base64," + Base64.encodeToString(jpeg, Base64.NO_WRAP)
             val content = JsonArray(
                 buildList {
+                    if (replyIntent.isNotBlank()) {
+                        add(
+                            buildJsonObject {
+                                put("type", "text")
+                                put("text", "本次回复要求（用户语音转写）：${JsonPrimitive(replyIntent.trim())}")
+                            },
+                        )
+                    }
                     if (previousReplies.isNotEmpty()) {
                         add(
                             buildJsonObject {
@@ -79,6 +88,7 @@ object AiClient {
                 listOf(
                     message("system", AiReplyPrompt.effective(config.replySystemPrompt)),
                     message("system", AiReplyPrompt.SAFETY),
+                    *if (replyIntent.isBlank()) emptyArray() else arrayOf(message("system", AiReplyPrompt.intentInstruction(replyIntent))),
                     buildJsonObject {
                         put("role", "user")
                         put("content", content)

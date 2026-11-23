@@ -53,6 +53,10 @@ class AlwaysUi(
     private val onAiLongScreenStart: ((Int, (String?) -> Unit) -> String?)? = null,
     private val onAiLongScreenFinish: ((String) -> Unit)? = null,
     private val onAiLongScreenCancel: ((String) -> Unit)? = null,
+    private val onAiReplyIntentStart: (((String?) -> Unit) -> Long?)? = null,
+    private val onAiReplyIntentFinish: ((Long) -> Unit)? = null,
+    private val onAiReplyIntentCancel: ((Long) -> Unit)? = null,
+    private val onAiReplyIntentCancelling: ((Long, Boolean) -> Unit)? = null,
 ) : Ui {
     private val theme: Theme get() = scope.theme
 
@@ -173,12 +177,20 @@ class AlwaysUi(
             label = {
                 labelView.text = when {
                     it == null -> "AI回复"
-                    it == "上拖" || it == "松手" || it == "准备中" -> it
+                    it == "上拖" || it == "上下滑" || it == "松手" || it == "准备中" -> it
+                    it == "松手取消" -> "取消"
+                    it == "说回复要求" || it == "准备录音" || it.endsWith("秒·松手回复") -> "说要求"
+                    it == "转写中…" -> "转写中"
+                    it == "截图中…" -> "截图中"
                     it.endsWith("屏·松手生成") -> it.substringBefore("·")
                     else -> "停止"
                 }
-                contentDescription = if (it == null) "AI回复，短按截屏，上拖后按住滚动截图，松手结束" else "AI回复，长截图：$it，点击停止"
+                contentDescription = if (it == null) "AI回复，短按截屏，上滑截长图，下滑说回复要求，松手截图回复" else "AI回复：$it"
             },
+            voiceStart = { status -> onAiReplyIntentStart?.invoke(status) },
+            voiceFinish = { onAiReplyIntentFinish?.invoke(it) },
+            voiceCancel = { onAiReplyIntentCancel?.invoke(it) },
+            voiceCancelling = { id, cancelling -> onAiReplyIntentCancelling?.invoke(id, cancelling) },
         )
         setOnTouchListener(gesture)
         onDetach = gesture::onDetach

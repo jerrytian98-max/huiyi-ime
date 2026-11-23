@@ -14,19 +14,28 @@ internal class ScreenCaptureGesture(
     private val finish: (String) -> Unit,
     private val cancel: (String) -> Unit,
     private val label: (String?) -> Unit,
+    private val voiceStart: ((String?) -> Unit) -> Long? = { null },
+    private val voiceFinish: (Long) -> Unit = {},
+    private val voiceCancel: (Long) -> Unit = {},
+    private val voiceCancelling: (Long, Boolean) -> Unit = { _, _ -> },
 ) : View.OnTouchListener {
+    private var downX = 0f
     private var downY = 0f
     private var dragged = false
     private var token: String? = null
     private var runningToken: String? = null
     private var busy = false
     private var stoppingTap = false
-    private val hint = Runnable { if (view.isPressed && !dragged) label("上拖") }
+    private var voiceMode = false
+    private var voiceToken: Long? = null
+    private var runningVoiceToken: Long? = null
+    private var voiceCancelled = false
+    private val hint = Runnable { if (view.isPressed && !dragged) label("上下滑") }
 
     init {
-        view.contentDescription = "AI回复，点按截当前屏幕；上拖后按住滚动截图，松手结束；不支持的页面松手后继续"
+        view.contentDescription = "AI回复，点按截屏，上滑截长图，下滑说回复要求，松手截图回复"
         view.setOnLongClickListener {
-            Toast.makeText(view.context, "上拖后按住滚动截长图，松手生成回复；不支持的页面松手后自动截图", Toast.LENGTH_LONG).show()
+            Toast.makeText(view.context, "短按截屏；上滑截长图；下滑说说你想怎么回，松手截图回复，左滑取消", Toast.LENGTH_LONG).show()
             true
         }
     }
@@ -41,16 +50,21 @@ internal class ScreenCaptureGesture(
         when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
                 val active = runningToken
-                if (busy && active != null && token == null) {
+                val activeVoice = runningVoiceToken
+                if (busy && token == null && voiceToken == null && (active != null || activeVoice != null)) {
                     stoppingTap = true
-                    cancel(active)
+                    active?.let(cancel)
+                    activeVoice?.let(voiceCancel)
                     view.isPressed = true
                     return true
                 }
                 stoppingTap = false
                 reset()
+                downX = event.rawX
                 downY = event.rawY
                 dragged = false
+                voiceMode = false
+                voiceCancelled = false
                 view.isPressed = true
                 view.parent?.requestDisallowInterceptTouchEvent(true)
                 view.postDelayed(hint, 350)
@@ -70,6 +84,25 @@ internal class ScreenCaptureGesture(
                     }
                     runningToken = token
                     if (token == null) label(null)
+                } else if (!dragged && event.rawY - downY >= view.context.dp(24)) {
+                    dragged = true
+                    voiceMode = true
+                    view.removeCallbacks(hint)
+                    voiceToken = voiceStart { text ->
+                        busy = text != null
+                        if (text == null) runningVoiceToken = null
+                        label(if (text != null && voiceCancelled) "松手取消" else text)
+                    }
+                    runningVoiceToken = voiceToken
+                    if (voiceToken == null) label(null)
+                }
+                if (voiceMode) {
+                    val cancelling = event.rawX - downX <= -view.context.dp(72)
+                    if (voiceCancelled != cancelling) {
+                        voiceCancelled = cancelling
+                        voiceToken?.let { voiceCancelling(it, cancelling) }
+                        label(if (cancelling) "松手取消" else "说回复要求")
+                    }
                 }
             }
 
@@ -79,6 +112,12 @@ internal class ScreenCaptureGesture(
                 view.parent?.requestDisallowInterceptTouchEvent(false)
                 if (stoppingTap) {
                     stoppingTap = false
+                    return true
+                }
+                if (voiceMode) {
+                    val currentVoice = voiceToken
+                    voiceToken = null
+                    if (voiceCancelled) currentVoice?.let(voiceCancel) else currentVoice?.let(voiceFinish)
                     return true
                 }
                 val current = token
@@ -92,6 +131,11 @@ internal class ScreenCaptureGesture(
             }
 
             MotionEvent.ACTION_CANCEL -> {
+                if (voiceMode) {
+                    // Losing the pointer/window must never submit an unfinished voice intent.
+                    reset()
+                    return true
+                }
                 // Some IME windows cancel the original pointer when it crosses into the app.
                 // A drag already armed by the user is a release, not a request to discard it.
                 val current = token
@@ -112,6 +156,10 @@ internal class ScreenCaptureGesture(
     fun reset() {
         view.removeCallbacks(hint)
         token?.let(cancel)
+        voiceToken?.let(voiceCancel)
+        voiceToken = null
+        runningVoiceToken = null
+        voiceCancelled = false
         // A released capture belongs to the accessibility service and must survive
         // the toolbar being detached when a chat app hides the keyboard on scroll.
         token = null
@@ -125,7 +173,7 @@ internal class ScreenCaptureGesture(
     fun onDetach() {
         // A chat app can close the IME while a scroll action is running. The
         // physical UP will no longer reach this button, so finish this hold.
-        token?.takeIf { dragged }?.let {
+        token?.takeIf { dragged && !voiceMode }?.let {
             token = null
             finish(it)
         }

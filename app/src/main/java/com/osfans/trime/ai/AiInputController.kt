@@ -24,6 +24,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
@@ -44,7 +45,7 @@ class AiInputController(private val service: TrimeInputMethodService) {
         var released = false
     }
     private var longCapture: LongCapture? = null
-    private class HeldVoice(val id: Long, val epoch: Long, val revision: Long, val recorder: AiAudioRecorder, val status: (String?) -> Unit) {
+    private class HeldVoice(val id: Long, val epoch: Long, val revision: Long, val recorder: AiAudioRecorder, val status: (String?) -> Unit, val replyIntent: Boolean) {
         val released = CompletableDeferred<Unit>()
         var job: Job? = null
     }
@@ -290,19 +291,28 @@ class AiInputController(private val service: TrimeInputMethodService) {
     }
 
     /** Called once after the space key's long-press threshold; the key retains its touch stream. */
-    fun startHeldVoice(status: (String?) -> Unit): Long? {
+    fun startHeldVoice(status: (String?) -> Unit): Long? = startHeldVoiceInternal(status, replyIntent = false)
+
+    fun startHeldReplyIntent(status: (String?) -> Unit): Long? = startHeldVoiceInternal(status, replyIntent = true)
+
+    private fun startHeldVoiceInternal(status: (String?) -> Unit, replyIntent: Boolean): Long? {
         if (destroyed || !service.isInputViewShown || !requireEditor()) return null
         if (service.checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             openActivity(AiMicrophonePermissionActivity::class.java)
             return null
         }
         stopVoice()
+        cancelLongScreenAnalysis()
         cancelText()
         dismissCaptureDialog(endSession = true)
-        val session = HeldVoice(++nextHeldVoiceId, generation, selectionRevision, AiAudioRecorder(service), status)
+        if (replyIntent) {
+            if (AiQuickCapture.isSupported) AiAccessibilityCaptureService.cancelCurrent()
+            AiEvents.finishSession(AiEvents.captureState.requestId)
+        }
+        val session = HeldVoice(++nextHeldVoiceId, generation, selectionRevision, AiAudioRecorder(service), status, replyIntent)
         heldVoice = session
         status("准备录音")
-        service.showHeldVoiceRecording(true)
+        service.showHeldVoiceRecording(true, replyIntent = replyIntent)
         session.job = service.lifecycleScope.launch {
             try {
                 coroutineScope {
@@ -315,44 +325,61 @@ class AiInputController(private val service: TrimeInputMethodService) {
                         }) { seconds ->
                             handler.post {
                                 if (heldVoice === session && !session.released.isCompleted) {
-                                    status("${seconds}秒·松开转写")
+                                    status(if (replyIntent) "${seconds}秒·松手回复" else "${seconds}秒·松开转写")
                                     service.updateHeldVoiceRecording(seconds = seconds)
                                 }
                             }
                         }
                     }
-                    val original = target() ?: error("暂时无法读取输入位置，请重新长按空格")
+                    val original = target() ?: error("暂时无法读取输入位置，请回到输入框重试")
                     val config = withContext(Dispatchers.IO) { AiConfigStore.load(service) }
                     check(config.cloudSpeech && config.isSpeechReady) { "请先在 AI 设置中配置并启用云端语音" }
+                    if (replyIntent) check(config.isVisionReady) { "请先在 AI 设置中配置 AI回复服务" }
                     val audio = recording.await()
                     // At the 60-second limit the microphone stops, but upload still waits for release.
                     if (heldVoice === session && !session.released.isCompleted) {
-                        status("录音结束·松开转写")
+                        status(if (replyIntent) "录音结束·松手回复" else "录音结束·松开转写")
                         service.updateHeldVoiceRecording(seconds = 60)
-                        service.showHeldVoiceRecording(true, atLimit = true)
+                        service.showHeldVoiceRecording(true, atLimit = true, replyIntent = replyIntent)
                     }
                     session.released.await()
                     if (!isCurrentHeldVoice(session)) return@coroutineScope
                     service.showHeldVoiceRecording(false)
                     status("转写中…")
                     val transcript = withTimeout(60_000) { AiSpeechClient.transcribe(config, audio) }
+                    check(transcript.isNotBlank()) { "没有听清回复要求，请重新下滑说话" }
                     if (!isCurrentHeldVoice(session)) return@coroutineScope
                     val sameTarget = matches(original)
                     if (!isCurrentHeldVoice(session)) return@coroutineScope
-                    heldVoice = null
-                    status(null)
                     if (!sameTarget) {
                         toast("输入位置已变化，本次语音已取消")
-                    } else if (!service.commitDictationText(transcript)) {
-                        toast("输入框暂时无法接收文字，请重新长按空格")
+                    } else if (replyIntent) {
+                        AiReplyPrompt.validateIntent(transcript)
+                        status("截图中…")
+                        // Let the recording layer disappear before the screenshot is taken.
+                        delay(120)
+                        if (!isCurrentHeldVoice(session) || !matches(original)) return@coroutineScope
+                        heldVoice = null
+                        status(null)
+                        try {
+                            launchCaptureInternal(transcript, original)
+                        } catch (cancelled: CancellationException) {
+                            throw cancelled
+                        } catch (error: Exception) {
+                            toast(error.message ?: "无法开始截图，请重试")
+                        }
+                    } else {
+                        heldVoice = null
+                        status(null)
+                        if (!service.commitDictationText(transcript)) toast("输入框暂时无法接收文字，请重新长按空格")
                     }
                 }
             } catch (_: TimeoutCancellationException) {
-                if (heldVoice === session) toast("语音转写超时，请重新长按空格")
+                if (heldVoice === session) toast(if (replyIntent) "回复要求转写超时，请重新下滑说话" else "语音转写超时，请重新长按空格")
             } catch (cancelled: CancellationException) {
                 throw cancelled
             } catch (error: Exception) {
-                if (heldVoice === session) toast(error.message ?: "语音转写失败，请重新长按空格")
+                if (heldVoice === session) toast(error.message ?: "语音转写失败，请重试")
             } finally {
                 session.recorder.finish()
                 if (heldVoice === session) {
@@ -374,6 +401,11 @@ class AiInputController(private val service: TrimeInputMethodService) {
         session.recorder.finish()
         service.showHeldVoiceRecording(false)
         session.status("转写中…")
+    }
+
+    fun updateReplyIntentCancellation(id: Long, cancelling: Boolean) {
+        if (heldVoice?.let { it.id == id && it.replyIntent && !it.released.isCompleted } != true) return
+        service.updateHeldVoiceRecording(cancelling = cancelling)
     }
 
     fun cancelHeldVoice(id: Long? = null) {
@@ -759,19 +791,26 @@ class AiInputController(private val service: TrimeInputMethodService) {
         service.lifecycleScope.launch { launchCaptureInternal() }
     }
 
-    private suspend fun launchCaptureInternal() {
+    private suspend fun launchCaptureInternal(replyIntent: String = "", original: AiEditTarget? = null) {
         if (!AiConfigStore.load(service).isVisionReady) {
             toast("请先配置 AI回复服务")
             openSettings()
             return
         }
-        captureTarget = target() ?: return toast("暂时无法读取输入框，请回到聊天框后重试").let { }
+        if (original != null && !matches(original)) return toast("输入位置已变化，本次回复已取消").let { }
+        captureTarget = original ?: target() ?: return toast("暂时无法读取输入框，请回到聊天框后重试").let { }
         captureRequestId = UUID.randomUUID().toString()
         AiCaptureInsertion.remember(captureRequestId, captureTarget!!)
-        if (AiQuickCapture.isSupported && AiAccessibilityCaptureService.tryCapture(service, captureRequestId)) return
+        if (AiQuickCapture.isSupported && AiAccessibilityCaptureService.tryCapture(service, captureRequestId, replyIntent)) return
+        // Keep the transcript process-local; Android may persist Activity intent extras.
+        if (replyIntent.isNotBlank() && !AiEvents.beginCapture(captureRequestId, replyIntent)) {
+            toast("另一个截图请求正在处理，请稍后重试")
+            return
+        }
         service.startActivity(
             Intent(service, AiCaptureActivity::class.java)
                 .putExtra(AiCaptureActivity.EXTRA_REQUEST_ID, captureRequestId)
+                .putExtra(AiCaptureActivity.EXTRA_REQUIRE_INTENT, replyIntent.isNotBlank())
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
         )
     }

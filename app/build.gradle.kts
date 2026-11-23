@@ -46,8 +46,8 @@ android {
         minSdk = 26
         testInstrumentationRunner = "com.osfans.trime.ai.AiIntegrationInstrumentation"
         targetSdk = 37
-        versionCode = 20270144
-        versionName = "0.1.43-ai"
+        versionCode = 20270145
+        versionName = "0.1.44-ai"
         buildConfigField("String", "AI_DEFAULT_CIPHERTEXT", "\"${bundledAiField("ciphertext")}\"")
         buildConfigField("String", "AI_DEFAULT_WRAP_KEY", "\"${bundledAiField("wrap_key")}\"")
         buildConfigField("String", "AI_DEFAULT_BUNDLE_ID", "\"${bundledAiField("id")}\"")

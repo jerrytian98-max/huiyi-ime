@@ -17,7 +17,7 @@ data class CaptureState(
             status == CaptureStatus.CAPTURING || status == CaptureStatus.ANALYZING
 }
 
-internal data class CaptureAnalysis(val state: CaptureState, val jpeg: ByteArray, val previousReplies: List<String> = emptyList())
+internal data class CaptureAnalysis(val state: CaptureState, val jpeg: ByteArray, val previousReplies: List<String> = emptyList(), val replyIntent: String = "")
 
 /** Main-thread, process-local handoff. No screenshot or conversation is persisted. */
 object AiEvents {
@@ -25,6 +25,7 @@ object AiEvents {
     var onSuggestions: ((List<String>) -> Unit)? = null
     private val captureObservers = linkedSetOf<(CaptureState) -> Unit>()
     private var screenshot: ByteArray? = null
+    private var replyIntent = ""
 
     var captureState: CaptureState = CaptureState()
         private set
@@ -38,9 +39,14 @@ object AiEvents {
         captureObservers.remove(observer)
     }
 
-    fun beginCapture(requestId: String): Boolean {
+    internal fun hasReplyIntent(requestId: String): Boolean = captureState.requestId == requestId &&
+        captureState.isInProgress && replyIntent.isNotBlank()
+
+    fun beginCapture(requestId: String, intent: String = ""): Boolean {
         if (requestId.isBlank() || isCaptureInProgress) return false
+        AiReplyPrompt.validateIntent(intent)
         screenshot = null
+        replyIntent = intent.trim()
         publish(CaptureState(requestId, CaptureStatus.AWAITING_PERMISSION, message = "等待系统截屏授权"))
         return true
     }
@@ -56,7 +62,7 @@ object AiEvents {
         require(jpeg.isNotEmpty() && jpeg.size <= 10 * 1024 * 1024) { "截屏为空或过大，请重新点击AI回复" }
         screenshot = jpeg
         updateCapture(requestId, CaptureStatus.ANALYZING, "正在理解聊天内容并生成回复")
-        return CaptureAnalysis(captureState, jpeg)
+        return CaptureAnalysis(captureState, jpeg, replyIntent = replyIntent)
     }
 
     fun canRegenerate(state: CaptureState): Boolean = state == captureState && screenshot != null &&
@@ -67,7 +73,7 @@ object AiEvents {
         val jpeg = screenshot ?: return null
         val next = state.copy(status = CaptureStatus.ANALYZING, suggestions = emptyList(), message = "正在根据本轮截图再次生成回复", attempt = state.attempt + 1)
         publish(next)
-        return CaptureAnalysis(next, jpeg, state.suggestions)
+        return CaptureAnalysis(next, jpeg, state.suggestions, replyIntent)
     }
 
     internal fun completeAnalysis(analysis: CaptureAnalysis, value: List<String>): Boolean = captureState == analysis.state && publishSuggestions(analysis.state.requestId, value)
@@ -105,7 +111,10 @@ object AiEvents {
     private fun isActive(requestId: String): Boolean = requestId == captureState.requestId && captureState.isInProgress
 
     private fun publish(state: CaptureState) {
-        if (state.status == CaptureStatus.IDLE || state.status == CaptureStatus.CANCELLED) screenshot = null
+        if (state.status == CaptureStatus.IDLE || state.status == CaptureStatus.CANCELLED) {
+            screenshot = null
+            replyIntent = ""
+        }
         captureState = state
         captureObservers.toList().forEach { it(state) }
     }

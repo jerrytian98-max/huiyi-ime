@@ -4,9 +4,9 @@
 
 **听懂话，看懂意。** 英文名称为 Huiyi Keyboard。0.1.7 起统一使用会意品牌，命名范围及覆盖安装说明见 [BRANDING.md](BRANDING.md)。
 
-基于 [Trime / 同文输入法](https://github.com/osfans/trime) 与 Rime。当前公开版本 0.1.43-ai，包含中英文键盘、语音转写、AI 文字整理和用户主动截屏后的聊天回复建议。功能栏保留「整理」「AI回复」，语音输入统一从长按空格键进入。
+基于 [Trime / 同文输入法](https://github.com/osfans/trime) 与 Rime。当前公开版本 0.1.44-ai，包含中英文键盘、语音转写、AI 文字整理和用户主动截屏后的聊天回复建议。功能栏保留「整理」「AI回复」，语音输入统一从长按空格键进入。
 
-**下载：**[最新版 Android arm64 APK](https://github.com/jerrytian98-max/huiyi-ime/releases/latest/download/huiyi-android-v0.1.43-arm64-debug.apk) · [所有版本](https://github.com/jerrytian98-max/huiyi-ime/releases)
+**下载：**[最新版 Android arm64 APK](https://github.com/jerrytian98-max/huiyi-ime/releases/latest/download/huiyi-android-v0.1.44-arm64-debug.apk) · [所有版本](https://github.com/jerrytian98-max/huiyi-ime/releases)
 
 ## AI回复方式
 
@@ -93,6 +93,8 @@
 选择兼容接口转写时，需要配置 multipart Audio Transcriptions 接口。聊天地址不能作为音频转写地址使用。此前0.1.1验证过的 OpenAI 示例地址为 `https://api.openai.com/v1/audio/transcriptions`，语音模型 `gpt-4o-mini-transcribe`，已经过真实音频请求验证。兼容接口可单独填写语音 API Key，留空时沿用文字 Key。腾讯云使用独立凭证。云端转写和 AI 整理分别产生请求费用。
 
 ## AI 功能入口
+
+- **下滑说回复要求（0.1.44）**：按住「AI回复」向下滑，看到“说说你想怎么回”后说要求，例如“委婉拒绝，这周没空，下周可以”。松手停止录音，云端转写后自动截图，结合要求生成聊天回复；语音要求不会当作正文直接输入。录音时左滑显示“松手取消”，移回可继续；系统取消触摸或键盘关闭时放弃。普通短按和上滑截长图保持原有功能。首次需要麦克风和截屏授权；本次要求只保留在当前截图会话内，同图再次生成沿用，下一次普通截图清空。
 
 - **空格语音**：首次授予麦克风权限后，返回聊天框再次长按空格。按住时录音并显示音频律动，松开后上传转写，结果直接输入原光标位置，最长60秒。取消或关闭键盘会停止录音并放弃本次请求；静音或过短录音会提示重试。功能栏不再提供独立「语音」按钮。
 - **整理**：直接点击会尝试整理当前输入框的完整草稿；已有选区时只整理选中文字。结果预览确认后替换原文或选区。支持中文与英文，最多一次 6000 字符。AI 被要求保留数字、姓名、原意和不确定性。
