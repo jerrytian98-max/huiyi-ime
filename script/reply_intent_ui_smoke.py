@@ -67,8 +67,12 @@ with log_path.open('wb') as log:
         stereo = b''.join(mono[index:index + 2] * 6 for index in range(0, len(mono), 2))
 
         def packets():
-            audio_format = pb.AudioFormat(samplingRate=48000, channels=pb.AudioFormat.Stereo, format=pb.AudioFormat.AUD_FMT_S16, mode=pb.AudioFormat.MODE_UNSPECIFIED)
+            audio_format = pb.AudioFormat(samplingRate=48000, channels=pb.AudioFormat.Stereo, format=pb.AudioFormat.AUD_FMT_S16, mode=pb.AudioFormat.MODE_REAL_TIME)
+            started = time.monotonic()
             for offset in range(0, len(stereo), 3840):
+                remaining = started + offset / 192000 - time.monotonic()
+                if remaining > 0:
+                    time.sleep(remaining)
                 yield pb.AudioPacket(format=audio_format, timestamp=int(time.time() * 1_000_000), audio=stereo[offset:offset + 3840])
         stub.injectAudio(packets(), metadata=metadata, timeout=30)
         shell('run-as', pkg, 'touch', 'files/reply-intent-audio-done')

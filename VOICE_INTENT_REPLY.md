@@ -31,6 +31,6 @@
 
 `AiReplyIntentTest` 覆盖请求隔离、再次生成、退出清空和输入长度限制。`ReplyIntentGestureChecks` 验证手势分流、取消和失去触摸；`ReplyIntentNetworkChecks` 使用本机 HTTPS 模拟服务验证生产 ASR 与视觉客户端的串联。
 
-在 API 35 模拟器上，`script/reply_intent_ui_smoke.py` 启动 `replyIntentUi` instrumentation，等待真实 AudioRecord 就绪后，通过模拟器 gRPC 注入合成音频，执行实际下滑/松手和左滑取消，检查回复插入原光标并保留前后文字。音频采用有背压的注入模式，避免实时注入丢帧导致静音；不使用电脑麦克风，不调用外部 AI 服务。
+在 API 35 模拟器上，`script/reply_intent_ui_smoke.py` 启动 `replyIntentUi` instrumentation，等待真实 AudioRecord 就绪后，通过模拟器 gRPC 按实时节奏注入完整合成音频，执行实际下滑/松手和左滑取消，检查回复插入原光标并保留前后文字。不使用电脑麦克风，不调用外部 AI 服务。模拟器音频注入曾出现静音，结果应以保存的 JSON 为准。
 
 这些模拟检查不能替代 One UI 真机、真人录音及真实模型回复效果验证。
